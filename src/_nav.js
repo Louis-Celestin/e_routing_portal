@@ -23,52 +23,22 @@ const _nav = [
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
   },
   {
-    component: CNavTitle,
-    name: 'commerciaux',
-  },
-  {
-    component: CNavItem,
-    name: 'Liste des commerciaux',
-    to: '/theme/colors',
-    icon: <CIcon icon={cilDrop} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavTitle,
-    name: 'routings',
-  },
-  {
     component: CNavGroup,
-    name: 'Routing commercial',
-    to: '/base',
+    name: 'Routings',
+    to: '/routing',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Liste',
-        to: '/base/accordion',
+        name: 'Tous les Routings',
+        to: '/routing/all-routings',
       },
       {
         component: CNavItem,
-        name: 'Création',
-        to: '/base/accordion',
+        name: 'Ajouter un routing',
+        to: '/routing/add-new-routing',
       },
-    ],
-  },
-  {
-    component: CNavTitle,
-    name: 'routines',
-  },
-  {
-    component: CNavGroup,
-    name: 'Routines commerciales',
-    to: '/base',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-    items: [
-      {
-        component: CNavItem,
-        name: 'Liste',
-        to: '/base/accordion',
-      },
+   
     ],
   },
 ]

@@ -51,6 +51,11 @@ const Toasts = React.lazy(() => import('./views/notifications/toasts/Toasts'))
 
 const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
+//Mes routes
+
+const AllRoutings = React.lazy(()=>import('./views/routing/AllRoutings/AllRoutings'))
+const AddNewRouting = React.lazy(()=>import('./views/routing/AddNewRouting/AddNewRouting'))
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
@@ -97,6 +102,9 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
+  { path: '/routing', name: 'Routings', element: AllRoutings, exact: true },
+  { path: '/routing/all-routings', name: 'All Routings', element: AllRoutings },
+  { path: '/routing/add-new-routing', name: 'Add New Routing', element: AddNewRouting },
 ]
 
 export default routes
