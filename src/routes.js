@@ -55,6 +55,7 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const AllRoutings = React.lazy(()=>import('./views/routing/AllRoutings/AllRoutings'))
 const AddNewRouting = React.lazy(()=>import('./views/routing/AddNewRouting/AddNewRouting'))
+const MesCommerciaux = React.lazy(()=>import('./views/commerciaux/MesCommerciaux/MesCommerciaux'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -105,6 +106,9 @@ const routes = [
   { path: '/routing', name: 'Routings', element: AllRoutings, exact: true },
   { path: '/routing/all-routings', name: 'All Routings', element: AllRoutings },
   { path: '/routing/add-new-routing', name: 'Add New Routing', element: AddNewRouting },
+  { path: '/commerciaux', name: 'Commerciaux', element: MesCommerciaux, exact: true },
+  { path: '/commerciaux/mes-commerciaux', name: 'Mes Commerciaux', element: MesCommerciaux },
+  
 ]
 
 export default routes
