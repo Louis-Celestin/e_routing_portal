@@ -33,6 +33,7 @@
     "@mui/material": "^5.16.1",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@popperjs/core": "^2.11.8",
+    "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "classnames": "^2.5.1",
     "core-js": "^3.37.1",
@@ -59,7 +60,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "postcss": "^8.4.38",
     "prettier": "3.3.2",
-    "sass": "^1.77.5",
+    "sass": "1.77.6",
     "vite": "^5.2.13"
   }
 }

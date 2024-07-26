@@ -1,4 +1,5 @@
 import React from 'react'
+import ProtectedRoute from './components/ProtectedRoutes'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -55,58 +56,466 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 const AllRoutings = React.lazy(()=>import('./views/routing/AllRoutings/AllRoutings'))
 const AddNewRouting = React.lazy(()=>import('./views/routing/AddNewRouting/AddNewRouting'))
-const AllRoutines = React.lazy(()=>import('./views/routines/AllRoutines/AllRoutines'))
+const MesCommerciaux = React.lazy(()=>import('./views/commerciaux/MesCommerciaux/MesCommerciaux'))
+const Login = React.lazy(()=>import('./views/pages/login/Login'))
+
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
-  { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/theme', name: 'Theme', element: Colors, exact: true },
-  { path: '/theme/colors', name: 'Colors', element: Colors },
-  { path: '/theme/typography', name: 'Typography', element: Typography },
-  { path: '/base', name: 'Base', element: Cards, exact: true },
-  { path: '/base/accordion', name: 'Accordion', element: Accordion },
-  { path: '/base/breadcrumbs', name: 'Breadcrumbs', element: Breadcrumbs },
-  { path: '/base/cards', name: 'Cards', element: Cards },
-  { path: '/base/carousels', name: 'Carousel', element: Carousels },
-  { path: '/base/collapses', name: 'Collapse', element: Collapses },
-  { path: '/base/list-groups', name: 'List Groups', element: ListGroups },
-  { path: '/base/navs', name: 'Navs', element: Navs },
-  { path: '/base/paginations', name: 'Paginations', element: Paginations },
-  { path: '/base/placeholders', name: 'Placeholders', element: Placeholders },
-  { path: '/base/popovers', name: 'Popovers', element: Popovers },
-  { path: '/base/progress', name: 'Progress', element: Progress },
-  { path: '/base/spinners', name: 'Spinners', element: Spinners },
-  { path: '/base/tabs', name: 'Tabs', element: Tabs },
-  { path: '/base/tables', name: 'Tables', element: Tables },
-  { path: '/base/tooltips', name: 'Tooltips', element: Tooltips },
-  { path: '/buttons', name: 'Buttons', element: Buttons, exact: true },
-  { path: '/buttons/buttons', name: 'Buttons', element: Buttons },
-  { path: '/buttons/dropdowns', name: 'Dropdowns', element: Dropdowns },
-  { path: '/buttons/button-groups', name: 'Button Groups', element: ButtonGroups },
-  { path: '/charts', name: 'Charts', element: Charts },
-  { path: '/forms', name: 'Forms', element: FormControl, exact: true },
-  { path: '/forms/form-control', name: 'Form Control', element: FormControl },
-  { path: '/forms/select', name: 'Select', element: Select },
-  { path: '/forms/checks-radios', name: 'Checks & Radios', element: ChecksRadios },
-  { path: '/forms/range', name: 'Range', element: Range },
-  { path: '/forms/input-group', name: 'Input Group', element: InputGroup },
-  { path: '/forms/floating-labels', name: 'Floating Labels', element: FloatingLabels },
-  { path: '/forms/layout', name: 'Layout', element: Layout },
-  { path: '/forms/validation', name: 'Validation', element: Validation },
-  { path: '/icons', exact: true, name: 'Icons', element: CoreUIIcons },
-  { path: '/icons/coreui-icons', name: 'CoreUI Icons', element: CoreUIIcons },
-  { path: '/icons/flags', name: 'Flags', element: Flags },
-  { path: '/icons/brands', name: 'Brands', element: Brands },
-  { path: '/notifications', name: 'Notifications', element: Alerts, exact: true },
-  { path: '/notifications/alerts', name: 'Alerts', element: Alerts },
-  { path: '/notifications/badges', name: 'Badges', element: Badges },
-  { path: '/notifications/modals', name: 'Modals', element: Modals },
-  { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
-  { path: '/widgets', name: 'Widgets', element: Widgets },
-  { path: '/routing', name: 'Routings', element: AllRoutings, exact: true },
-  { path: '/routing/all-routings', name: 'All Routings', element: AllRoutings },
-  { path: '/routing/add-new-routing', name: 'Add New Routing', element: AddNewRouting },
-  { path: '/routines', name: 'Routines', element: AllRoutings, exact: true },
-  { path: '/routines/all-routines', name: 'All Routines', element: AllRoutines },
-]
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    element: (
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/theme',
+    name: 'Theme',
+    element: (
+      <ProtectedRoute>
+        <Colors />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/theme/colors',
+    name: 'Colors',
+    element: (
+      <ProtectedRoute>
+        <Colors />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/theme/typography',
+    name: 'Typography',
+    element: (
+      <ProtectedRoute>
+        <Typography />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base',
+    name: 'Base',
+    element: (
+      <ProtectedRoute>
+        <Cards />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/base/accordion',
+    name: 'Accordion',
+    element: (
+      <ProtectedRoute>
+        <Accordion />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/breadcrumbs',
+    name: 'Breadcrumbs',
+    element: (
+      <ProtectedRoute>
+        <Breadcrumbs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/cards',
+    name: 'Cards',
+    element: (
+      <ProtectedRoute>
+        <Cards />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/carousels',
+    name: 'Carousel',
+    element: (
+      <ProtectedRoute>
+        <Carousels />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/collapses',
+    name: 'Collapse',
+    element: (
+      <ProtectedRoute>
+        <Collapses />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/list-groups',
+    name: 'List Groups',
+    element: (
+      <ProtectedRoute>
+        <ListGroups />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/navs',
+    name: 'Navs',
+    element: (
+      <ProtectedRoute>
+        <Navs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/paginations',
+    name: 'Paginations',
+    element: (
+      <ProtectedRoute>
+        <Paginations />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/placeholders',
+    name: 'Placeholders',
+    element: (
+      <ProtectedRoute>
+        <Placeholders />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/popovers',
+    name: 'Popovers',
+    element: (
+      <ProtectedRoute>
+        <Popovers />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/progress',
+    name: 'Progress',
+    element: (
+      <ProtectedRoute>
+        <Progress />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/spinners',
+    name: 'Spinners',
+    element: (
+      <ProtectedRoute>
+        <Spinners />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/tabs',
+    name: 'Tabs',
+    element: (
+      <ProtectedRoute>
+        <Tabs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/tables',
+    name: 'Tables',
+    element: (
+      <ProtectedRoute>
+        <Tables />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/base/tooltips',
+    name: 'Tooltips',
+    element: (
+      <ProtectedRoute>
+        <Tooltips />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/buttons',
+    name: 'Buttons',
+    element: (
+      <ProtectedRoute>
+        <Buttons />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/buttons/buttons',
+    name: 'Buttons',
+    element: (
+      <ProtectedRoute>
+        <Buttons />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/buttons/dropdowns',
+    name: 'Dropdowns',
+    element: (
+      <ProtectedRoute>
+        <Dropdowns />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/buttons/button-groups',
+    name: 'Button Groups',
+    element: (
+      <ProtectedRoute>
+        <ButtonGroups />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/charts',
+    name: 'Charts',
+    element: (
+      <ProtectedRoute>
+        <Charts />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms',
+    name: 'Forms',
+    element: (
+      <ProtectedRoute>
+        <FormControl />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/forms/form-control',
+    name: 'Form Control',
+    element: (
+      <ProtectedRoute>
+        <FormControl />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/select',
+    name: 'Select',
+    element: (
+      <ProtectedRoute>
+        <Select />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/checks-radios',
+    name: 'Checks & Radios',
+    element: (
+      <ProtectedRoute>
+        <ChecksRadios />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/range',
+    name: 'Range',
+    element: (
+      <ProtectedRoute>
+        <Range />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/input-group',
+    name: 'Input Group',
+    element: (
+      <ProtectedRoute>
+        <InputGroup />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/floating-labels',
+    name: 'Floating Labels',
+    element: (
+      <ProtectedRoute>
+        <FloatingLabels />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/layout',
+    name: 'Layout',
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/forms/validation',
+    name: 'Validation',
+    element: (
+      <ProtectedRoute>
+        <Validation />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/icons',
+    exact: true,
+    name: 'Icons',
+    element: (
+      <ProtectedRoute>
+        <CoreUIIcons />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/icons/coreui-icons',
+    name: 'CoreUI Icons',
+    element: (
+      <ProtectedRoute>
+        <CoreUIIcons />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/icons/flags',
+    name: 'Flags',
+    element: (
+      <ProtectedRoute>
+        <Flags />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/icons/brands',
+    name: 'Brands',
+    element: (
+      <ProtectedRoute>
+        <Brands />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    element: (
+      <ProtectedRoute>
+        <Alerts />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/notifications/alerts',
+    name: 'Alerts',
+    element: (
+      <ProtectedRoute>
+        <Alerts />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/notifications/badges',
+    name: 'Badges',
+    element: (
+      <ProtectedRoute>
+        <Badges />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/notifications/modals',
+    name: 'Modals',
+    element: (
+      <ProtectedRoute>
+        <Modals />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/notifications/toasts',
+    name: 'Toasts',
+    element: (
+      <ProtectedRoute>
+        <Toasts />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/widgets',
+    name: 'Widgets',
+    element: (
+      <ProtectedRoute>
+        <Widgets />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/routing',
+    name: 'Routings',
+    element: (
+      <ProtectedRoute>
+        <AllRoutings />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/routing/all-routings',
+    name: 'All Routings',
+    element: (
+      <ProtectedRoute>
+        <AllRoutings />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/routing/add-new-routing',
+    name: 'Add New Routing',
+    element: (
+      <ProtectedRoute>
+        <AddNewRouting />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/commerciaux',
+    name: 'Commerciaux',
+    element: (
+      <ProtectedRoute>
+        <MesCommerciaux />
+      </ProtectedRoute>
+    ),
+    exact: true,
+  },
+  {
+    path: '/commerciaux/mes-commerciaux',
+    name: 'Mes Commerciaux',
+    element: (
+      <ProtectedRoute>
+        <MesCommerciaux />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    element: <Login />,
+  },
+];
 
 export default routes
