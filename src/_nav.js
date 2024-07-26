@@ -32,11 +32,19 @@ const _nav = [
         component: CNavItem,
         name: 'Tous les Routings',
         to: '/routing/all-routings',
-      },
+      },   
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Routines',
+    to: '/routines',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+    items: [
       {
         component: CNavItem,
-        name: 'Ajouter un routing',
-        to: '/routing/add-new-routing',
+        name: 'Toutes les routines',
+        to: '/routines/all-routines',
       },
    
     ],

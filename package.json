@@ -36,6 +36,7 @@
     "chart.js": "^4.4.3",
     "classnames": "^2.5.1",
     "core-js": "^3.37.1",
+    "date-format": "^4.0.14",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
     "primereact": "^10.7.0",

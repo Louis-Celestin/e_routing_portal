@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class RoutingService {
+export class RoutineService {
 
   async getRoutingByBdm() {
     try {
@@ -56,6 +56,22 @@ try{
     console.error('Error:', error);
   });
 }catch(error){console.error('Error:', error);}
+
+  }
+
+  async getAllRoutinesByBdm(){
+    try {
+      const response = await axios.post("http://172.31.1.27:5500/api/getAllRoutinesByBdm",// Données envoyées en JSON
+        { bdmId: 1 }, // Données envoyées en JSON
+        {  headers: {
+            'Content-Type': 'application/json', // Définir le type de contenu
+          }});
+
+      return response.data;
+    } catch (error) {
+      console.error('Erreur lors de la récupération des routines:', error);
+      throw error;
+    }
 
   }
 

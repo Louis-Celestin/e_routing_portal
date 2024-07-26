@@ -19,8 +19,15 @@ import 'primeflex/primeflex.css';
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
+import { RoutingService } from '../../../apis/services/RoutingService';
+import { Calendar } from 'primereact/calendar';
+import { AutoComplete } from "primereact/autocomplete";
+import { ProgressSpinner } from 'primereact/progressspinner';
+
+
 
 export default function AllRoutings() {
+    const routingService = new RoutingService()
     let emptyProduct = {
         id: null,
         name: '',
@@ -32,7 +39,18 @@ export default function AllRoutings() {
         rating: 0,
         inventoryStatus: 'INSTOCK'
     };
+    const [loading, setLoading] = useState(false);
 
+    const [dateDebut, setDateDebut] = useState(null)
+    const [dateFin, setDateFin] = useState(null)
+    const [descriptionRouting,setDescriptionRouting] = useState(null)
+    const [pointsMarchands, setPointsMarchands] = useState([]);
+    const [selectedPointsmarchands, setSelectedPointsMarchands] = useState(null);
+    const [filteredPointsMarchands, setfilteredPointsMarchands] = useState(null);
+    const [agents, setAgents] = useState([]);
+    const [selectedAgent, setSelectedAgent] = useState(null);
+    const [filteredAgents, setFilteredAgents] = useState(null);
+    const [selectedAgentId, setSelectedAgentId] = useState(null);
     const [products, setProducts] = useState(null);
     const [routings, setRoutings] = useState(null);
     const [productDialog, setProductDialog] = useState(false);
@@ -45,11 +63,89 @@ export default function AllRoutings() {
     const toast = useRef(null);
     const dt = useRef(null);
 
+    const Loader = () => (
+        <div className="loader">
+            <style>
+                {`
+                    .loader {
+                        border: 16px solid #f3f3f3; /* Light grey */
+                        border-top: 16px solid #3498db; /* Blue */
+                        border-radius: 50%;
+                        width: 120px;
+                        height: 120px;
+                        animation: spin 2s linear infinite;
+                    }
+    
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `}
+            </style>
+        </div>
+    );
+    
+
+
+    
+    
+    const search = (event) => {
+        setTimeout(() => {
+            let _filteredAgents = [...agents];
+
+            if (event.query.trim().length) {
+                _filteredAgents = agents.filter((agent) => {
+                    return agent.fullName.toLowerCase().startsWith(event.query.toLowerCase());
+                });
+            }
+            console.log(_filteredAgents); 
+            setFilteredAgents(_filteredAgents)
+        }, 250);
+    };
+
+    const searchPm = (event) => {
+        
+        setTimeout(() => {
+            let _filteredPms;
+
+            if (!event.query.trim().length) {
+                _filteredPms = [...pointsMarchands];
+            }
+            else {
+                _filteredPms = pointsMarchands.filter((pointMarchand) => {
+                    return pointMarchand.POINT_MARCHAND.toLowerCase().startsWith(event.query.toLowerCase());
+                });
+            }
+
+            setfilteredPointsMarchands(_filteredPms);
+        }, 250);
+    }
+
+    const onAgentChange = (e) => {
+        setSelectedAgent(e.value);
+        setSelectedAgentId(e.value ? e.value.id : null);
+        
+    };
+
+    const onChangeDescription = (e)=>{
+        setDescriptionRouting(e.target.value)
+    }
+
     useEffect(() => {
         ProductService.getProducts().then((data) => setProducts(data));
-        
+        routingService.getRoutingByBdm().then((data)=>setRoutings(data))
+        routingService.getMyAgents().then((data) => {         
+            const agentsWithFullName = data.map(agent => ({
+                ...agent,
+                fullName: `${agent.nom_agent} ${agent.prenom_agent}`
+            }));
+            setAgents(agentsWithFullName);
+        });
+
+        routingService.getPms().then((data)=>setPointsMarchands(data))
     }, []);
 
+     
     const formatCurrency = (value) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
     };
@@ -63,6 +159,7 @@ export default function AllRoutings() {
     const hideDialog = () => {
         setSubmitted(false);
         setProductDialog(false);
+        setLoading(false)
     };
 
     const hideDeleteProductDialog = () => {
@@ -73,30 +170,62 @@ export default function AllRoutings() {
         setDeleteProductsDialog(false);
     };
 
-    const saveProduct = () => {
-        setSubmitted(true);
-
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = { ...product };
-
-            if (product.id) {
-                const index = findIndexById(product.id);
-
-                _products[index] = _product;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                _product.id = createId();
-                _product.image = 'product-placeholder.svg';
-                _products.push(_product);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
-
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
-        }
+        const formatSeletedPms = () => {
+        return selectedPointsmarchands.map(pms => ({
+            nom_Pm: pms.POINT_MARCHAND
+        }));
     };
+
+// const saveRouting = () => {
+// setSubmitted(true)
+//     let routing_data = {
+//         description_routing: descriptionRouting,
+//         date_debut_routing: dateDebut,
+//         date_fin_routing: dateFin,
+//         bdm: 1,
+//         agent: selectedAgentId,
+//         pm_routing: formatSeletedPms()  // Utiliser directement le résultat de la fonction
+//     };
+
+//     routingService.saveRouting(routing_data).then((result)=>{
+//         if(result){
+//             return <Toast/>
+//         }
+//     }).catch(err=>{
+//         console.log(err)
+//     })
+
+//     console.log(routing_data);
+// };
+
+const saveRouting = async () => {
+    setLoading(true)
+    setSubmitted(true);  // Afficher le loader
+
+    let routing_data = {
+        description_routing: descriptionRouting,
+        date_debut_routing: dateDebut,
+        date_fin_routing: dateFin,
+        bdm: 1,
+        agent: selectedAgentId,
+        pm_routing: formatSeletedPms()
+    };
+
+    try {
+        const result = await routingService.saveRouting(routing_data);
+        console.log(result)
+        if (result) {
+            toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Routing créé avec succès', life: 3000 });
+            hideDialog(); // Fermer le modal
+        }
+    } catch (err) {
+        console.error(err);
+    } finally {
+        setLoading(false);  // Cacher le loader
+    }
+};
+
+
 
     const editProduct = (product) => {
         setProduct({ ...product });
@@ -186,14 +315,14 @@ export default function AllRoutings() {
     const leftToolbarTemplate = () => {
         return (
             <div className="flex flex-wrap gap-2">
-                <Button label="New" icon="pi pi-plus" severity="success" onClick={openNew} />
-                <Button label="Delete" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
+                <Button label="Nouveau" icon="pi pi-plus" severity="success" onClick={openNew} />
+                <Button label="Supprimer" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
             </div>
         );
     };
 
     const rightToolbarTemplate = () => {
-        return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
+        return <Button label="Exporter" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
     };
 
     const imageBodyTemplate = (rowData) => {
@@ -221,6 +350,46 @@ export default function AllRoutings() {
         );
     };
 
+    // MES TEMPLATES
+
+    const descriptionBodyTemplate = (rowData)=>{
+        return rowData.description_routing
+    }
+
+    const dateDebutBodyTemplate = (rowData)=>{
+
+        return rowData.date_debut_routing
+    }
+
+    const dateFinBodyTemplate = (rowData)=>{
+
+        return  rowData.date_fin_routing 
+    }
+
+
+    const agentBodyTemplate = (rowData) => {
+        const agent = rowData.agent;
+        const fullName = agent.nom_agent + " " + agent.prenom_agent;
+        return fullName;
+    }
+    
+
+    const pmBodytemplate = (rowData) => {
+        let dataFormat = JSON.parse(rowData.pm_routing);
+        let formattedPmNames = dataFormat.map((element) => {
+          if (Array.isArray(element.nom_Pm)) {
+            return element.nom_Pm.join(', ');
+          } else {
+            return element.nom_Pm;
+          }
+        });
+      
+        return formattedPmNames.join(', ');
+      };
+      
+      
+    
+
     const getSeverity = (product) => {
         switch (product.inventoryStatus) {
             case 'INSTOCK':
@@ -242,16 +411,21 @@ export default function AllRoutings() {
             <h4 className="m-0">Mes Routings</h4>
             <IconField iconPosition="left">
                 <InputIcon className="pi pi-search" />
-                <InputText type="search" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="Search..." />
+                <InputText type="Rechercher" onInput={(e) => setGlobalFilter(e.target.value)} placeholder="rechercher..." />
             </IconField>
         </div>
     );
     const productDialogFooter = (
-        <React.Fragment>
-            <Button label="Cancel" icon="pi pi-times" outlined onClick={hideDialog} />
-            <Button label="Save" icon="pi pi-check" onClick={saveProduct} />
-        </React.Fragment>
+        <div className="p-d-flex p-ai-center p-jc-between">
+            {loading ? (
+                <ProgressSpinner />
+            ) : (
+                <Button label="Créer" icon="pi pi-check" onClick={saveRouting} />
+            )}
+            <Button label="Annuler" icon="pi pi-times" onClick={hideDialog} className="p-button-secondary" />
+        </div>
     );
+    
     const deleteProductDialogFooter = (
         <React.Fragment>
             <Button label="No" icon="pi pi-times" outlined onClick={hideDeleteProductDialog} />
@@ -271,75 +445,157 @@ export default function AllRoutings() {
             <div className="card">
                 <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
 
-                <DataTable ref={dt} value={products} selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)}
+                <DataTable ref={dt} value={routings} selection={selectedProducts} onSelectionChange={(e) => setSelectedProducts(e.value)}
                         dataKey="id"  paginator rows={10} rowsPerPageOptions={[5, 10, 25]}
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" globalFilter={globalFilter} header={header}>
                     <Column selectionMode="multiple" exportable={false}></Column>
-                    <Column field="code" header="Description Routing" sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="name" header="Date de debut" sortable style={{ minWidth: '16rem' }}></Column>
-                    <Column field="image" header="Date de fin" body={imageBodyTemplate}></Column>
-                    <Column field="price" header="Commercial" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
-                    {/* <Column field="category" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
-                    <Column field="rating" header="Reviews" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
-                    <Column field="inventoryStatus" header="Status" body={statusBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column> */}
+                    <Column field="description_routing" header="Nom du routing" body={descriptionBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column>
+                    <Column field="date_debut_routing" header="Date de debut" body={dateDebutBodyTemplate} sortable style={{ minWidth: '16rem' }}></Column>
+                    <Column field="date_fin_routing" header="Date de fin" body={dateFinBodyTemplate}></Column>
+                    <Column field="pm_routing" header="PM" body={pmBodytemplate} sortable style={{ minWidth: '8rem' }}></Column>
+                    <Column field="agent" header="Commercial" body={agentBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
                     <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
                 </DataTable>
             </div>
 
-            <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+            {/* <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Details du routing" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
                 {product.image && <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.image} className="product-image block m-auto pb-3" />}
                 <div className="field">
-                    <label htmlFor="name" className="font-bold">
-                        Name
-                    </label>
-                    <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                    {submitted && !product.name && <small className="p-error">Name is required.</small>}
-                </div>
-                <div className="field">
                     <label htmlFor="description" className="font-bold">
-                        Description
+                        Nom du routing
                     </label>
-                    <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
+                    <InputText id="description" onChange={onChangeDescription} required autoFocus className={classNames({ 'p-invalid': submitted && !descriptionRouting })} />
+                    {submitted && !descriptionRouting && <small className="p-error">Le nom du routing est obligatoire.</small>}
                 </div>
-
                 <div className="field">
-                    <label className="mb-3 font-bold">Category</label>
-                    <div className="formgrid grid">
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
-                            <label htmlFor="category1">Accessories</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
-                            <label htmlFor="category2">Clothing</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
-                            <label htmlFor="category3">Electronics</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
-                            <label htmlFor="category4">Fitness</label>
-                        </div>
-                    </div>
+                    <label htmlFor="date_debut_routing" className="font-bold">
+                        Date de debut du routing
+                    </label>
+                    <Calendar id="buttondisplay" onChange={(e) => setDateDebut(e.value)} showIcon />
+                </div>
+                <div className="field">
+                    <label htmlFor="date_fin_routing" className="font-bold">
+                        Date de fin du routing
+                    </label>
+                    <Calendar id="buttondisplay"  onChange={(e) => setDateFin(e.value)} showIcon />
                 </div>
 
-                <div className="formgrid grid">
-                    <div className="field col">
-                        <label htmlFor="price" className="font-bold">
-                            Price
-                        </label>
-                        <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
-                    </div>
-                    <div className="field col">
-                        <label htmlFor="quantity" className="font-bold">
-                            Quantity
-                        </label>
-                        <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} />
-                    </div>
-                </div>
-            </Dialog>
+                <div className="card flex justify-content-center">
+                <label htmlFor="commercial" className="font-bold">
+                        Commercial
+                    </label>
+                    <>
+            <AutoComplete
+                field="fullName"
+                value={selectedAgent}
+                suggestions={filteredAgents}
+                completeMethod={search}
+                onChange={onAgentChange}
+                required
+                itemTemplate={(item) => (
+                    <div>{item.fullName}</div>
+                )}
+            />
+        </>
+        </div>
+        <div className="card flex justify-content-center">
+                <label htmlFor="ponit_marchand" className="font-bold">
+                        Points marchands
+                    </label>
+                    <>
+                    <AutoComplete field="POINT_MARCHAND" multiple value={selectedPointsmarchands} suggestions={filteredPointsMarchands} completeMethod={searchPm} onChange={(e) => setSelectedPointsMarchands(e.value)} required/>
+        </>
+        </div>
+            </Dialog> */}
+
+{/* <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Details du routing" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+    {product.image && <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.image} className="product-image block m-auto pb-3" />}
+    <div className="field">
+        <label htmlFor="description" className="font-bold">
+            Nom du routing
+        </label>
+        <InputText id="description" onChange={onChangeDescription} required autoFocus className={classNames({ 'p-invalid': submitted && !descriptionRouting })} />
+        {submitted && !descriptionRouting && <small className="p-error">Le nom du routing est obligatoire.</small>}
+    </div>
+    <div className="field">
+        <label htmlFor="date_debut_routing" className="font-bold">
+            Date de debut du routing
+        </label>
+        <Calendar id="buttondisplay" onChange={(e) => setDateDebut(e.value)} showIcon />
+    </div>
+    <div className="field">
+        <label htmlFor="date_fin_routing" className="font-bold">
+            Date de fin du routing
+        </label>
+        <Calendar id="buttondisplay" onChange={(e) => setDateFin(e.value)} showIcon />
+    </div>
+
+    <div className="card flex justify-content-center">
+        <label htmlFor="commercial" className="font-bold">
+            Commercial
+        </label>
+        <AutoComplete
+            field="fullName"
+            value={selectedAgent}
+            suggestions={filteredAgents}
+            completeMethod={search}
+            onChange={onAgentChange}
+            required
+            itemTemplate={(item) => (
+                <div>{item.fullName}</div>
+            )}
+        />
+    </div>
+    <div className="card flex justify-content-center">
+        <label htmlFor="ponit_marchand" className="font-bold">
+            Points marchands
+        </label>
+        <AutoComplete field="POINT_MARCHAND" multiple value={selectedPointsmarchands} suggestions={filteredPointsMarchands} completeMethod={searchPm} onChange={(e) => setSelectedPointsMarchands(e.value)} required />
+    </div>
+</Dialog> */}
+
+<Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Détails du routing" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+    <div className="field">
+        <label htmlFor="description" className="font-bold">Nom du routing</label>
+        <InputText id="description" value={descriptionRouting} onChange={onChangeDescription} required autoFocus className={classNames({ 'p-invalid': submitted && !descriptionRouting })} />
+        {submitted && !descriptionRouting && <small className="p-error">Le nom du routing est obligatoire.</small>}
+    </div>
+    <div className="field">
+        <label htmlFor="date_debut_routing" className="font-bold">Date de début du routing</label>
+        <Calendar id="date_debut_routing" value={dateDebut} onChange={(e) => setDateDebut(e.value)} showIcon />
+    </div>
+    <div className="field">
+        <label htmlFor="date_fin_routing" className="font-bold">Date de fin du routing</label>
+        <Calendar id="date_fin_routing" value={dateFin} onChange={(e) => setDateFin(e.value)} showIcon />
+    </div>
+    <div className="card flex justify-content-center">
+        <label htmlFor="commercial" className="font-bold">Commercial</label>
+        <AutoComplete
+            field="fullName"
+            value={selectedAgent}
+            suggestions={filteredAgents}
+            completeMethod={search}
+            onChange={onAgentChange}
+            required
+            itemTemplate={(item) => <div>{item.fullName}</div>}
+        />
+    </div>
+    <div className="card flex justify-content-center">
+        <label htmlFor="point_marchand" className="font-bold">Points marchands</label>
+        <AutoComplete
+            field="POINT_MARCHAND"
+            multiple
+            value={selectedPointsmarchands}
+            suggestions={filteredPointsMarchands}
+            completeMethod={searchPm}
+            onChange={(e) => setSelectedPointsMarchands(e.value)}
+            required
+        />
+    </div>
+</Dialog>
+
+
 
             <Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
                 <div className="confirmation-content">

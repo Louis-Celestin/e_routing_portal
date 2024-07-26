@@ -1,0 +1,1 @@
+const urlBase = "localhost:5500/api"
