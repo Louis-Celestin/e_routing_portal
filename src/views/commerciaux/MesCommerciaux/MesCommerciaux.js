@@ -26,7 +26,7 @@ import axios from 'axios';
 export class AgentService {
     async getAgents() {
         try {
-            const response = await axios.post('http://172.31.1.38:5500/api/getMyAgents', {
+            const response = await axios.post('http://172.31.1.27:5500/api/getMyAgents', {
                 bdmId: 1,
             });
             return response.data;
