@@ -1,11 +1,23 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
-
+import { useState, useEffect } from 'react'
 import routes from '../routes'
 
 import { CBreadcrumb, CBreadcrumbItem } from '@coreui/react'
 
 const AppBreadcrumb = () => {
+
+  const user_type = window.sessionStorage.getItem('user_type');
+
+  const [isDC, setDc] = useState(false)
+
+  useEffect(() => {
+    if(user_type === '9'){
+      setDc(true)
+    }
+  },[])
+
+
   const currentLocation = useLocation().pathname
 
   const getRouteName = (pathname, routes) => {
@@ -33,7 +45,14 @@ const AppBreadcrumb = () => {
 
   return (
     <CBreadcrumb className="my-0">
-      <CBreadcrumbItem href="/">Home</CBreadcrumbItem>
+      {isDC ? (
+        <CBreadcrumbItem href="/admin-dashboard">Home</CBreadcrumbItem>
+      ) : 
+      (
+        <CBreadcrumbItem href="/">Home</CBreadcrumbItem>
+      )
+      }
+      
       {breadcrumbs.map((breadcrumb, index) => {
         return (
           <CBreadcrumbItem

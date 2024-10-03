@@ -25,6 +25,7 @@ const AppHeaderDropdown = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('username');
+    sessionStorage.removeItem('bdmId');
     navigate('/login');
   };
 

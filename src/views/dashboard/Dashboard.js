@@ -1,12 +1,22 @@
-import React from 'react'
-import classNames from 'classnames'
+import React, { useEffect, useState } from 'react'
+// import { PieChart } from '@mui/x-charts/PieChart';
 
+import { Calendar } from 'primereact/calendar';
+import { Gauge } from '@mui/x-charts';
+import { RoutineInfos } from '../../apis/services/RoutineInfos';  
+import { ProgressSpinner } from 'primereact/progressspinner';
 import {
   CAvatar,
   CButton,
   CButtonGroup,
   CCard,
   CCardBody,
+  CCardTitle,
+  CCardSubtitle,
+  CCardText,
+  CCardLink,
+  CCardImage,
+
   CCardFooter,
   CCardHeader,
   CCol,
@@ -18,6 +28,7 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CCardGroup,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import {
@@ -53,8 +64,49 @@ import avatar6 from 'src/assets/images/avatars/6.jpg'
 import WidgetsBrand from '../widgets/WidgetsBrand'
 import WidgetsDropdown from '../widgets/WidgetsDropdown'
 import MainChart from './MainChart'
+import { bottom, end, right } from '@popperjs/core';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
+
+  const [commercials, setCommercials] = useState([]);
+  const [loading, setLoading] = useState(false  ); 
+  const routineInfos = new RoutineInfos();
+  const [dates, setDates] = useState(null);
+  
+  const formatDate = (date) => {
+    return date.toISOString().slice(0, 10); // Convert to "YYYY-MM-DD"
+  };
+
+  useEffect(  ()=>{
+    const fetchRoutineInfos = async () => {
+
+      setLoading(true);
+      try{
+        let data;
+        if (dates && dates.length === 2){
+          const startDate = dates[0];
+          const endDate = dates[1];
+          console.log(formatDate(startDate))
+          console.log(formatDate(endDate))
+          data = await routineInfos.getRoutineInfosByDateRange(formatDate(startDate), formatDate(endDate));
+          console.log(startDate)
+          console.log(endDate)
+        } else{
+          data = await routineInfos.getRoutineInfos();
+        }
+        setCommercials(data);
+      } catch(error){
+        console.error('Error fetching data', error);
+      }
+      finally {
+        setLoading(false); // Hide loader when data fetching is done
+      }
+    };
+    fetchRoutineInfos();
+  }, [dates]);
+    
+
   const progressExample = [
     { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
     { title: 'Unique', value: '24.093 Users', percent: 20, color: 'info' },
@@ -178,8 +230,146 @@ const Dashboard = () => {
 
   return (
     <>
-      <WidgetsDropdown className="mb-4" />
-      <CCard className="mb-4">
+      <div className='w-100 bg-gray'>
+        <div className='h2'>
+          Chiffres des commerciaux
+        </div>
+      </div>
+      <div className="row">
+        <div className='col-3 my-5'>
+            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection showIcon touchUI showButtonBar/>
+        </div>
+      </div>
+      <section>
+        <div className='row'>
+            {loading ? (<ProgressSpinner />) :
+              (
+                  <>
+                    {commercials.map((commercial) => (
+                    <div className='col-3'>
+                      <div className='block rounded-2 my-2 p-3 shadow'>
+                        <div className='com-info-block my-3 d-flex align-items-center'>
+                          <div className='img-block me-3'>
+                            <img src={avatar6} className='w-auto' style={{borderRadius:100, height:'70px'}}/>
+                          </div>
+                          <div className='infos'>
+                            <span className='text-wrap'>{commercial.agent}</span>   
+                          </div> 
+                        </div>
+                        <div>
+                          <h6 className='fw-50'>Satistiques du commercial</h6>
+                        </div> 
+                        <div className='border-bottom d-flex flex-column justify-content-between'>
+                          <div className='text-info d-flex justify-content-between'>
+                            <span className='fz-6'>Routings demandés :</span>
+                            <span className='fw-bold'>{commercial.totalPointsMarchands}</span>
+                          </div>
+                          <div className='text-info d-flex justify-content-between'>
+                            <span>Routings éffectués :</span>
+                            <span className='fw-bold'>{commercial.routingsCount}</span>
+                          </div>
+                          <div className='text-info d-flex justify-content-between'>
+                            <span>Interventions :</span>
+                            <span className='fw-bold'>{commercial.routinesCount}</span>
+                          </div>
+                        </div>
+                        <div>
+                        <Gauge
+                            margin={{
+                              top: 0,
+                              right:30,
+                              left:30,
+                              bottom: 0,
+                            }}
+                            value={commercial.routingsCount}
+                            valueMax={commercial.totalPointsMarchands}
+                            // startAngle={-90}
+                            // endAngle={90}
+                            text={
+                              ({ value, valueMax }) => `${value} / ${valueMax}`
+                          }
+                          width={200}
+                          height={190}
+                        />
+                        </div>
+                        <div>
+                          <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}`} style={{cursor:'pointer'}}>Voir plus</Link>
+                        </div>
+                      </div>
+                    </div>
+
+                    ))} 
+                  </>
+              )}
+        </div>
+      
+    
+      </section>
+      {/* <CRow>
+        <CCol>
+          <CCard style={{ width: '18rem' }} className='bg-success-subtle'>
+            <CCardImage orientation="top" src={react} />
+            <CCardBody>
+              <CCardTitle>Infos Admin</CCardTitle>
+              <CCardSubtitle className="mb-2 text-body-secondary">Maïmouna Diop</CCardSubtitle>
+              <CCardText>
+                Some quick example text to build on the card title and make up the bulk of the card's content.
+              </CCardText>
+              <CCardText>120 Marchands</CCardText>
+              <CCardLink href="#">Card link</CCardLink>
+              <CCardLink href="#">Another link</CCardLink>
+            </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+          <CCard style={{ width: '18rem' }} className='bg-success-subtle'>
+            <CCardImage orientation="top" src={react} />
+            <CCardBody>
+              <CCardTitle>Infos Admin</CCardTitle>
+              <CCardSubtitle className="mb-2 text-body-secondary">Maïmouna Diop</CCardSubtitle>
+              <CCardText>
+                Some quick example text to build on the card title and make up the bulk of the card's content.
+              </CCardText>
+              <CCardText>120 Marchands</CCardText>
+              <CCardLink href="#">Card link</CCardLink>
+              <CCardLink href="#">Another link</CCardLink>
+            </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+          <CCard style={{ width: '18rem' }} className='bg-success-subtle'>
+            <CCardImage orientation="top" src={react} />
+            <CCardBody>
+              <CCardTitle>Infos Admin</CCardTitle>
+              <CCardSubtitle className="mb-2 text-body-secondary">Maïmouna Diop</CCardSubtitle>
+              <CCardText>
+                Some quick example text to build on the card title and make up the bulk of the card's content.
+              </CCardText>
+              <CCardText>120 Marchands</CCardText>
+              <CCardLink href="#">Card link</CCardLink>
+              <CCardLink href="#">Another link</CCardLink>
+            </CCardBody>
+          </CCard>
+        </CCol>
+        <CCol>
+          <CCard style={{ width: '18rem' }} className='bg-success-subtle'>
+            <CCardImage orientation="top" src={react} />
+            <CCardBody>
+              <CCardTitle>Infos Admin</CCardTitle>
+              <CCardSubtitle className="mb-2 text-body-secondary">Maïmouna Diop</CCardSubtitle>
+              <CCardText>
+                Some quick example text to build on the card title and make up the bulk of the card's content.
+              </CCardText>
+              <CCardText>120 Marchands</CCardText>
+              <CCardLink href="#">Card link</CCardLink>
+              <CCardLink href="#">Another link</CCardLink>
+            </CCardBody>
+          </CCard>
+        </CCol>
+      </CRow> */}
+
+      {/* <WidgetsDropdown className="mb-4" /> */}
+      {/* <CCard className="mb-4">
         <CCardBody>
           <CRow>
             <CCol sm={5}>
@@ -379,7 +569,7 @@ const Dashboard = () => {
             </CCardBody>
           </CCard>
         </CCol>
-      </CRow>
+      </CRow> */}
     </>
   )
 }

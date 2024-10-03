@@ -1,11 +1,15 @@
 import axios from 'axios';
+const urlLocal = "http://172.31.1.84:5500"
+const urlOnline = "https://apigp.onrender.com"
+
+const urlBase = urlOnline
 
 export class RoutineService {
 
   async getRoutingByBdm() {
     try {
-      const response = await axios.post("http://172.31.1.27:5500/api/getRoutingByBdm",// Données envoyées en JSON
-        { bdmId: 1 }, // Données envoyées en JSON
+      const response = await axios.post("https://apigp.onrender.com/api/getRoutingByBdm",// Données envoyées en JSON
+        { bdmId: window.sessionStorage.getItem('bdmId') }, // Données envoyées en JSON
         {  headers: {
             'Content-Type': 'application/json', // Définir le type de contenu
           }});
@@ -20,8 +24,8 @@ export class RoutineService {
   async getMyAgents(){
 
     try {
-        const response = await axios.post("http://172.31.1.27:5500/api/getMyAgents",          // Données envoyées en JSON
-          { bdmId: 1 }, // Données envoyées en JSON
+        const response = await axios.post("https://apigp.onrender.com/api/getMyAgents",          // Données envoyées en JSON
+          { bdmId: window.sessionStorage.getItem('bdmId') }, // Données envoyées en JSON
           {  headers: {
               'Content-Type': 'application/json', // Définir le type de contenu
             }});
@@ -37,7 +41,7 @@ export class RoutineService {
 
   async getPms(){
     try{
-      const response = await axios.get("http://172.31.1.27:5500/api/getPms")
+      const response = await axios.get("https://apigp.onrender.com/api/getPms")
       return response.data
     }catch(error){
       console.error('Erreur lors des agents:', error);
@@ -48,7 +52,7 @@ export class RoutineService {
 
   async saveRouting(data){
 try{
-  axios.post('http://172.31.1.27:5500/api/makeRouting', data)
+  axios.post('https://apigp.onrender.com/api/makeRouting', data)
   .then(response => {
     console.log('Response:', response.data);
   })
@@ -61,8 +65,8 @@ try{
 
   async getAllRoutinesByBdm(){
     try {
-      const response = await axios.post("http://172.31.1.27:5500/api/getAllRoutinesByBdm",// Données envoyées en JSON
-        { bdmId: 1 }, // Données envoyées en JSON
+      const response = await axios.post("https://apigp.onrender.com/api/getAllRoutinesByBdm",// Données envoyées en JSON
+        { bdmId: window.sessionStorage.getItem('bdmId') }, // Données envoyées en JSON
         {  headers: {
             'Content-Type': 'application/json', // Définir le type de contenu
           }});
@@ -73,6 +77,22 @@ try{
       throw error;
     }
 
+  }
+
+  async allRoutines() {
+    try {
+      const response = await axios.post(`${urlBase}/api/allRoutines`,// Données envoyées en JSON
+        { agentTypeid: Number(window.sessionStorage.getItem('user_type')) }, // Données envoyées en JSON
+        {  headers: {
+            'Content-Type': 'application/json', // Définir le type de contenu
+          }});
+        console.log(response.data)
+      return response.data;
+
+    } catch (error) {
+      console.error('Erreur lors de la récupération du routing:', error);
+      throw error;
+    }
   }
 
 }

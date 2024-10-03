@@ -60,6 +60,15 @@ export default function AllRoutings() {
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+
+    const formatDate = (value) => {
+        return value.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    };
+
     const toast = useRef(null);
     const dt = useRef(null);
 
@@ -197,11 +206,13 @@ export default function AllRoutings() {
 
 //     console.log(routing_data);
 // };
-
+const showToast = (severityValue, summaryValue, detailValue)=> {
+    toast.current.show({
+    severity: severityValue,
+    summary: summaryValue,
+    detail: detailValue,})
+}
 const saveRouting = async () => {
-    setLoading(true)
-    setSubmitted(true);  // Afficher le loader
-
     let routing_data = {
         description_routing: descriptionRouting,
         date_debut_routing: dateDebut,
@@ -210,18 +221,33 @@ const saveRouting = async () => {
         agent: selectedAgentId,
         pm_routing: formatSeletedPms()
     };
-
+    setLoading(true)
     try {
         const result = await routingService.saveRouting(routing_data);
         console.log(result)
         if (result) {
-            toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Routing créé avec succès', life: 3000 });
+            setSubmitted(true);  // Afficher le loader
+            showToast('success','Success Message','Le routing est créé avec succès.');
+            setLoading(false);  // Cacher le loader
+            hideDialog(); // Fermer le modal
+            // toast.current.show({ severity: 'success', summary: 'Succès', detail: 'Routing créé avec succès', life: 3000 });
+        }
+        else{
+            setSubmitted(false);  // Afficher le loader
+            showToast('error','Error Message','Erreur dans la création du routing.');
+            setLoading(false);  // Cacher le loader
             hideDialog(); // Fermer le modal
         }
+
     } catch (err) {
         console.error(err);
+        setSubmitted(false);
+        showToast('error','Error Message',"Erreur dans la création du routing.");
+        setLoading(false);  // Cacher le loader
+        hideDialog(); // Fermer le modal
     } finally {
         setLoading(false);  // Cacher le loader
+        hideDialog(); // Fermer le modal
     }
 };
 
@@ -316,7 +342,7 @@ const saveRouting = async () => {
         return (
             <div className="flex flex-wrap gap-2">
                 <Button label="Nouveau" icon="pi pi-plus" severity="success" onClick={openNew} />
-                <Button label="Supprimer" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} />
+                {/* <Button label="Supprimer" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedProducts || !selectedProducts.length} /> */}
             </div>
         );
     };
@@ -358,12 +384,14 @@ const saveRouting = async () => {
 
     const dateDebutBodyTemplate = (rowData)=>{
 
-        return rowData.date_debut_routing
+        return formatDate(new Date(rowData.date_debut_routing))
+
     }
 
     const dateFinBodyTemplate = (rowData)=>{
 
-        return  rowData.date_fin_routing 
+        return formatDate(new Date(rowData.date_fin_routing))
+
     }
 
 
@@ -417,11 +445,8 @@ const saveRouting = async () => {
     );
     const productDialogFooter = (
         <div className="p-d-flex p-ai-center p-jc-between">
-            {loading ? (
-                <ProgressSpinner />
-            ) : (
+
                 <Button label="Créer" icon="pi pi-check" onClick={saveRouting} />
-            )}
             <Button label="Annuler" icon="pi pi-times" onClick={hideDialog} className="p-button-secondary" />
         </div>
     );
@@ -554,8 +579,11 @@ const saveRouting = async () => {
         <AutoComplete field="POINT_MARCHAND" multiple value={selectedPointsmarchands} suggestions={filteredPointsMarchands} completeMethod={searchPm} onChange={(e) => setSelectedPointsMarchands(e.value)} required />
     </div>
 </Dialog> */}
-
+<Toast ref={toast} />
 <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Détails du routing" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
+    {loading ? (<ProgressSpinner />) :
+    (
+        <>
     <div className="field">
         <label htmlFor="description" className="font-bold">Nom du routing</label>
         <InputText id="description" value={descriptionRouting} onChange={onChangeDescription} required autoFocus className={classNames({ 'p-invalid': submitted && !descriptionRouting })} />
@@ -592,7 +620,10 @@ const saveRouting = async () => {
             onChange={(e) => setSelectedPointsMarchands(e.value)}
             required
         />
-    </div>
+    </div>  
+        </>
+    )
+    }
 </Dialog>
 
 

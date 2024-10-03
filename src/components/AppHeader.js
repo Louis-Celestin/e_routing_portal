@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -33,10 +33,19 @@ const AppHeader = () => {
   const headerRef = useRef()
   const { colorMode, setColorMode } = useColorModes('coreui-free-react-admin-template-theme')
 
+  const user_type = window.sessionStorage.getItem('user_type');
+
+  const [isDC, setDc] = useState(false)
+
+  
+
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
 
   useEffect(() => {
+    if(user_type === '9'){
+      setDc(true)
+    }
     document.addEventListener('scroll', () => {
       headerRef.current &&
         headerRef.current.classList.toggle('shadow-sm', document.documentElement.scrollTop > 0)
@@ -54,9 +63,14 @@ const AppHeader = () => {
         </CHeaderToggler>
         <CHeaderNav className="d-none d-md-flex">
           <CNavItem>
+            {isDC ? (
+              <CNavLink to="/admin-dashboard" as={NavLink}>
+              Dashboard
+              </CNavLink>
+            ) : 
             <CNavLink to="/dashboard" as={NavLink}>
               Dashboard
-            </CNavLink>
+            </CNavLink> }
           </CNavItem>
           <CNavItem>
             <CNavLink href="#">Users</CNavLink>
@@ -71,16 +85,16 @@ const AppHeader = () => {
               <CIcon icon={cilBell} size="lg" />
             </CNavLink>
           </CNavItem>
-          <CNavItem>
+          {/* <CNavItem>
             <CNavLink href="#">
               <CIcon icon={cilList} size="lg" />
             </CNavLink>
-          </CNavItem>
-          <CNavItem>
+          </CNavItem> */}
+          {/* <CNavItem>
             <CNavLink href="#">
               <CIcon icon={cilEnvelopeOpen} size="lg" />
             </CNavLink>
-          </CNavItem>
+          </CNavItem> */}
         </CHeaderNav>
         <CHeaderNav>
           <li className="nav-item py-1">

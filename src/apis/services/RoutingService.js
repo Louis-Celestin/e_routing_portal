@@ -1,15 +1,20 @@
 import axios from 'axios';
+const urlLocal = "http://172.31.1.58:5500"
+const urlOnline = "https://apigp.onrender.com"
+
+const urlBase = urlOnline
 
 export class RoutingService {
 
+
   async getRoutingByBdm() {
     try {
-      const response = await axios.post("http://172.31.1.27:5500/api/getRoutingByBdm",// Données envoyées en JSON
-        { bdmId: 1 }, // Données envoyées en JSON
+      const response = await axios.post(`${urlBase}/api/getRoutingByBdm`,// Données envoyées en JSON
+        { bdmId: Number(window.sessionStorage.getItem('bdmId')) }, // Données envoyées en JSON
         {  headers: {
             'Content-Type': 'application/json', // Définir le type de contenu
           }});
-
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error('Erreur lors de la récupération du routing:', error);
@@ -20,8 +25,8 @@ export class RoutingService {
   async getMyAgents(){
 
     try {
-        const response = await axios.post("http://172.31.1.27:5500/api/getMyAgents",          // Données envoyées en JSON
-          { bdmId: 1 }, // Données envoyées en JSON
+        const response = await axios.post(`${urlBase}/api/getMyAgents`,          // Données envoyées en JSON
+          { bdmId: window.sessionStorage.getItem('bdmId') }, // Données envoyées en JSON
           {  headers: {
               'Content-Type': 'application/json', // Définir le type de contenu
             }});
@@ -37,7 +42,7 @@ export class RoutingService {
 
   async getPms(){
     try{
-      const response = await axios.get("http://172.31.1.27:5500/api/getPms")
+      const response = await axios.get(`${urlBase}/api/getPms`)
       return response.data
     }catch(error){
       console.error('Erreur lors des agents:', error);
@@ -47,16 +52,31 @@ export class RoutingService {
   }
 
   async saveRouting(data){
-try{
-  axios.post('http://172.31.1.27:5500/api/makeRouting', data)
-  .then(response => {
-    console.log('Response:', response.data);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-}catch(error){console.error('Error:', error);}
+    try {
+      const response = await axios.post(`${urlBase}/api/makeRouting`, data);
+      console.log('Response:', response.data);
+      return response.data; // Return the response data so it can be handled by the calling function
+    } catch (error) {
+      console.error('Error:', error);
+      throw error; // Re-throw the error so it can be caught in the calling function
+    }
+  }
 
+
+  async allRoutings() {
+    try {
+      const response = await axios.post(`${urlBase}/api/allRoutings`,// Données envoyées en JSON
+        { agentTypeid: Number(window.sessionStorage.getItem('user_type')) }, // Données envoyées en JSON
+        {  headers: {
+            'Content-Type': 'application/json', // Définir le type de contenu
+          }});
+        console.log(response.data)
+      return response.data.routings;
+
+    } catch (error) {
+      console.error('Erreur lors de la récupération du routing:', error);
+      throw error;
+    }
   }
 
 }

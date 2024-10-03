@@ -1,1 +1,1 @@
-const urlBase = "localhost:5500/api"
+const urlBase = "http://172.31.1.47:5500/api"

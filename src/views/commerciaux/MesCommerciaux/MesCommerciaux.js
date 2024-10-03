@@ -22,12 +22,12 @@ import 'primeicons/primeicons.css';
 
 import axios from 'axios';
 
-
+console.log(window.sessionStorage.getItem('id'))
 export class AgentService {
     async getAgents() {
         try {
-            const response = await axios.post('http://172.31.1.27:5500/api/getMyAgents', {
-                bdmId: 1,
+            const response = await axios.post('https://apigp.onrender.com/api/getMyAgents', {
+                bdmId: window.sessionStorage.getItem('bdmId'),
             });
             return response.data;
         } catch (error) {
