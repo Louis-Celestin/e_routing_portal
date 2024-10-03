@@ -480,7 +480,7 @@ const saveRouting = async () => {
                     <Column field="date_fin_routing" header="Date de fin" body={dateFinBodyTemplate}></Column>
                     <Column field="pm_routing" header="PM" body={pmBodytemplate} sortable style={{ minWidth: '8rem' }}></Column>
                     <Column field="agent" header="Commercial" body={agentBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
-                    <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column>
+                    {/* <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '12rem' }}></Column> */}
                 </DataTable>
             </div>
 

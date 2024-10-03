@@ -293,7 +293,7 @@ const Dashboard = () => {
                         />
                         </div>
                         <div>
-                          <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}`} style={{cursor:'pointer'}}>Voir plus</Link>
+                          {/* <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}`} style={{cursor:'pointer'}}>Voir plus</Link> */}
                         </div>
                       </div>
                     </div>

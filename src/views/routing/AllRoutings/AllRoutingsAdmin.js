@@ -98,7 +98,7 @@ export default function RoutingTable() {
             <DataTable value={routings} paginator showGridlines rows={10} loading={loading} dataKey="id"
                 filters={filters} globalFilterFields={['agent', 'agent_routing_id', 'description_routing', 'date_debut_routing', 'date_fin_routing']}
                 header={header} emptyMessage="No routings found.">
-                <Column field="agent" header="BDM" body={agentBodyTemplate} filter filterPlaceholder='Search by BDM' sortable style={{ minWidth: '8rem' }}></Column>
+                <Column field="agent" header="BDM" body={agentBodyTemplate} style={{ minWidth: '8rem' }}></Column>
                 <Column field="description_routing" header="Description" filter filterPlaceholder="Search by Description" style={{ minWidth: '12rem' }} />
                 <Column field="date_debut_routing" header="Start Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateDebutBodyTemplate} />
                 <Column field="date_fin_routing" header="End Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateFinBodyTemplate} />
