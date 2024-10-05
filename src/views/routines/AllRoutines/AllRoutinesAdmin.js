@@ -57,11 +57,11 @@ export default function RoutineTable() {
     const initFilters = () => {
         setFilters({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            agent: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
-            point_marchand_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+            fullName: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+            point_marchand_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
             date_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
             veille_concurentielle_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
-            id_terminal_tpe_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] },
+            id_terminal_tpe_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
             etat_tpe_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
             etat_chargeur_tpe_routine: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
             probleme_bancaire: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
@@ -117,18 +117,18 @@ export default function RoutineTable() {
     return (
         <div className="card">
             <DataTable value={routines} paginator showGridlines rows={10} loading={loading} dataKey="id" 
-                    filters={filters} globalFilterFields={['agent', 'point_marchand_routine', 'date_routine', 'veille_concurentielle_routine', 'id_terminal_tpe_routine', 'etat_tpe_routine', 'etat_chargeur_tpe_routine', 'probleme_bancaire', 'description_problemebancaire', 'probleme_mobile', 'description_probleme_mobile', 'commentaire_routine', 'commenttaire_tpe_routine']} header={header}
+                    filters={filters} globalFilterFields={['fullName', 'point_marchand_routine', 'date_routine', 'veille_concurentielle_routine', 'id_terminal_tpe_routine', 'etat_tpe_routine', 'etat_chargeur_tpe_routine', 'probleme_bancaire', 'description_problemebancaire', 'probleme_mobile', 'description_probleme_mobile', 'commentaire_routine', 'commenttaire_tpe_routine']} header={header}
                     emptyMessage="No routines found.">
-                <Column field="agent" header="Commercial" body={agentBodyTemplate} style={{ minWidth: '8rem' }}></Column>
+                <Column field="fullName" header="Commercial" style={{ minWidth: '8rem' }}></Column>
                 <Column field="point_marchand_routine" header="PM" filter filterPlaceholder="Search by PM" style={{ minWidth: '14rem' }} />
-                <Column field="date_routine" header="Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateRoutineBodyTemplate} />
+                <Column field="date_routine" header="Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} />
                 <Column field="veille_concurentielle_routine" header="Concurence" filter filterPlaceholder="Search by Concurence" style={{ minWidth: '10rem' }} />
                 <Column field="id_terminal_tpe_routine" header="SN" filter filterPlaceholder="Search by SN" style={{ minWidth: '12rem' }} />
                 <Column field="etat_tpe_routine" header="Etat TPE" filter filterPlaceholder="Search by Etat TPE" style={{ minWidth: '12rem' }} />
-                <Column field="etat_chargeur_tpe_routine" header="Etat chargeur" filter filterPlaceholder="Search by Etat chargeur" style={{ minWidth: '8rem' }} />
-                <Column field="probleme_bancaire" header="Probleme bancaire" filter filterPlaceholder="Search by Probleme bancaire" style={{ minWidth: '8rem' }} />
+                {/* <Column field="etat_chargeur_tpe_routine" header="Etat chargeur" filter filterPlaceholder="Search by Etat chargeur" style={{ minWidth: '8rem' }} /> */}
+                {/* <Column field="probleme_bancaire" header="Probleme bancaire" filter filterPlaceholder="Search by Probleme bancaire" style={{ minWidth: '8rem' }} /> */}
                 {/* <Column field="description_problemebancaire" header="Description probleme bancaire" filter filterPlaceholder="Search by Description probleme bancaire" style={{ minWidth: '8rem' }} /> */}
-                <Column field="probleme_mobile" header="Probleme mobile" filter filterPlaceholder="Search by Probleme mobile" style={{ minWidth: '8rem' }} />
+                {/* <Column field="probleme_mobile" header="Probleme mobile" filter filterPlaceholder="Search by Probleme mobile" style={{ minWidth: '8rem' }} /> */}
                 {/* <Column field="description_probleme_mobile" header="Description probleme mobile" filter filterPlaceholder="Search by Description probleme mobile" style={{ minWidth: '8rem' }} /> */}
                 <Column field="commentaire_routine" header="Commentaire routine" filter filterPlaceholder="Search by Commentaire routine" style={{ minWidth: '12rem' }} />
                 <Column field="commenttaire_tpe_routine" header="Commentaire TPE" body={commenttaireTpeRoutine} filter filterPlaceholder="Search by Commentaire TPE" style={{ minWidth: '12rem' }} />

@@ -1,7 +1,6 @@
 import React from 'react'
 import ProtectedRoute from './components/ProtectedRoutes'
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
 
@@ -54,6 +53,7 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 //Mes routes
 
+const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const AllRoutings = React.lazy(()=>import('./views/routing/AllRoutings/AllRoutings'))
 const AllRoutines = React.lazy(()=>import('./views/routines/AllRoutines/AllRoutines'))
 const MesCommerciaux = React.lazy(()=>import('./views/commerciaux/MesCommerciaux/MesCommerciaux'))

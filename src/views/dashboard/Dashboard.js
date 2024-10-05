@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react'
 // import { PieChart } from '@mui/x-charts/PieChart';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primeicons/primeicons.css';
 
 import { Calendar } from 'primereact/calendar';
 import { Gauge } from '@mui/x-charts';

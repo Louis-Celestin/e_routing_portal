@@ -5,6 +5,11 @@ import { Calendar } from 'primereact/calendar';
 import { Gauge } from '@mui/x-charts';
 import { RoutineInfos } from '../../apis/services/RoutineInfos';  
 import { ProgressSpinner } from 'primereact/progressspinner';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primeicons/primeicons.css';
+
 import {
   CAvatar,
   CButton,
@@ -67,7 +72,7 @@ import MainChart from './MainChart'
 import { bottom, right } from '@popperjs/core';
 import { Link } from 'react-router-dom';
 
-const DashboardAdmin = () => {
+export default function DashboardAdmin(){
 
   const [commercials, setCommercials] = useState([]);
   const [loading, setLoading] = useState(false  ); 
@@ -295,4 +300,3 @@ const DashboardAdmin = () => {
   ) 
 }
 
-export default DashboardAdmin

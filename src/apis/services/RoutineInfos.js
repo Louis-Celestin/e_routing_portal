@@ -1,5 +1,5 @@
 import axios from "axios";
-const urlLocal = "http://172.31.1.58:5500"
+const urlLocal = "http://172.31.1.75:5500"
 const urlOnline = "https://apigp.onrender.com"
 
 const urlBase = urlOnline
@@ -57,4 +57,21 @@ export class RoutineInfos {
           throw error;
         }
   }
+
+  async getRoutineInfosForDcByCommercial(id){
+    try {
+        const response = await axios.post(`${urlBase}/api/getRoutineInfosForDcByCommercial`,
+            { idCommercial: id,
+            }, // Données envoyées en JSON
+    {  headers: {
+        'Content-Type': 'application/json', // Définir le type de contenu
+      }});
+
+      return response.data;     
+    }
+    catch (error) {
+        console.error('Erreur lors de la récupération du routing:', error);
+        throw error;
+      }
+}
 } 

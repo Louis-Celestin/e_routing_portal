@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { classNames } from 'primereact/utils';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { Calendar } from 'primereact/calendar';
@@ -19,15 +20,7 @@ export default function RoutingTable() {
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     
     const routingService = new RoutingService();
-
-    useEffect(() => {
-        routingService.allRoutings().then((data) => {
-            setRoutings(data);
-            setLoading(false);
-        });
-        initFilters();
-    }, []);
-
+    
     const formatDate = (value) => {
         return value.toLocaleDateString('en-GB', {
             day: '2-digit',
@@ -35,6 +28,15 @@ export default function RoutingTable() {
             year: 'numeric'
         });
     };
+    useEffect(() => {
+        routingService.allRoutings().then((data) => {
+            setRoutings(data);
+            setLoading(false);
+            console.log(routings)
+        });
+        initFilters();
+    }, []);
+
 
     const clearFilter = () => {
         initFilters();
@@ -52,11 +54,11 @@ export default function RoutingTable() {
     const initFilters = () => {
         setFilters({
             global: { value: null, matchMode: 'contains' },
-            agent: {value: null, matchMode: 'contains' },
+            fullName: {value: null, matchMode: 'contains' },
             agent_routing_id: { value: null, matchMode: 'equals' },
-            description_routing: { value: null, matchMode: 'startsWith' },
-            date_debut_routing: { value: null, matchMode: 'dateIs' },
-            date_fin_routing: { value: null, matchMode: 'dateIs' }
+            description_routing: { value: null, matchMode: 'contains' },
+            date: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            date_fin_routing: { value: null, matchMode: 'contains' }
         });
         setGlobalFilterValue('');
     };
@@ -74,15 +76,19 @@ export default function RoutingTable() {
     };
 
     const dateDebutBodyTemplate = (rowData) => {
-        return formatDate(new Date(rowData.date_debut_routing));
+        const date = new Date(rowData.date_debut_routing);
+        console.log(formatDate(date))
+        return isNaN(date) ?'Invalid Date' : formatDate(date);
     };
 
     const dateFinBodyTemplate = (rowData) => {
-        return formatDate(new Date(rowData.date_fin_routing));
+        const date = new Date(rowData.date_fin_routing);
+        console.log(date)
+        return isNaN(date) ?'Invalid Date' : formatDate(date);
     };
 
     const dateFilterTemplate = (options) => {
-        return <Calendar value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" />;
+        return <Calendar value={options.value} onChange={(e) => options.filterCallback(e.value, options.index)} readOnlyInput touchUI dateFormat="dd/mm/yy" placeholder="dd/mm/yyyy" />;
     };
 
     const agentBodyTemplate = (rowData) => {
@@ -96,12 +102,12 @@ export default function RoutingTable() {
     return (
         <div className="card">
             <DataTable value={routings} paginator showGridlines rows={10} loading={loading} dataKey="id"
-                filters={filters} globalFilterFields={['agent', 'agent_routing_id', 'description_routing', 'date_debut_routing', 'date_fin_routing']}
+                filters={filters} globalFilterFields={['fullName', 'agent_routing_id', 'description_routing', 'date', 'date_fin_routing']}
                 header={header} emptyMessage="No routings found.">
-                <Column field="agent" header="BDM" body={agentBodyTemplate} style={{ minWidth: '8rem' }}></Column>
+                <Column field="fullName" header="BDM" filter style={{ minWidth: '8rem' }}></Column>
                 <Column field="description_routing" header="Description" filter filterPlaceholder="Search by Description" style={{ minWidth: '12rem' }} />
-                <Column field="date_debut_routing" header="Start Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateDebutBodyTemplate} />
-                <Column field="date_fin_routing" header="End Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateFinBodyTemplate} />
+                <Column field="date_debut_routing" header="Start Date" filter filterField='date' style={{ minWidth: '10rem' }} />
+                <Column field="date_fin_routing" header="End Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} />
             </DataTable>
         </div>
     );

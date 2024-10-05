@@ -2,6 +2,11 @@ import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ProgressSpinner } from 'primereact/progressspinner';
+import 'primeflex/primeflex.css';  
+import 'primereact/resources/primereact.css';
+import 'primereact/resources/themes/lara-light-indigo/theme.css';
+import 'primeicons/primeicons.css';
+
 import { Link } from 'react-router-dom'
 import {
   CButton,
