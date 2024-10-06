@@ -119,9 +119,9 @@ export default function RoutineTable() {
             <DataTable value={routines} paginator showGridlines rows={10} loading={loading} dataKey="id" 
                     filters={filters} globalFilterFields={['fullName', 'point_marchand_routine', 'date_routine', 'veille_concurentielle_routine', 'id_terminal_tpe_routine', 'etat_tpe_routine', 'etat_chargeur_tpe_routine', 'probleme_bancaire', 'description_problemebancaire', 'probleme_mobile', 'description_probleme_mobile', 'commentaire_routine', 'commenttaire_tpe_routine']} header={header}
                     emptyMessage="No routines found.">
-                <Column field="fullName" header="Commercial" style={{ minWidth: '8rem' }}></Column>
+                <Column field="fullName" header="Commercial" filter style={{ minWidth: '8rem' }}></Column>
                 <Column field="point_marchand_routine" header="PM" filter filterPlaceholder="Search by PM" style={{ minWidth: '14rem' }} />
-                <Column field="date_routine" header="Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} />
+                <Column field="date_routine" header="Date" sortable filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} />
                 <Column field="veille_concurentielle_routine" header="Concurence" filter filterPlaceholder="Search by Concurence" style={{ minWidth: '10rem' }} />
                 <Column field="id_terminal_tpe_routine" header="SN" filter filterPlaceholder="Search by SN" style={{ minWidth: '12rem' }} />
                 <Column field="etat_tpe_routine" header="Etat TPE" filter filterPlaceholder="Search by Etat TPE" style={{ minWidth: '12rem' }} />

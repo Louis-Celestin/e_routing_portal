@@ -118,14 +118,14 @@ export default function AdvancedFilterDemo() {
                 <Column field="nom_agent" header="Nom agent" filter filterPlaceholder="Search by Nom agent" style={{ minWidth: '12rem' }} />
                 <Column field="prenom_agent" header="Prenom agent" filter filterPlaceholder="Search by Prenom agent" style={{ minWidth: '12rem' }} />
                 <Column field="point_marchand_routine" header="PM" filter filterPlaceholder="Search by PM" style={{ minWidth: '14rem' }} />
-                <Column field="date_routine" header="Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateRoutineBodyTemplate} />
+                <Column field="date_routine" header="Date" sortable filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} body={dateRoutineBodyTemplate} />
                 <Column field="veille_concurentielle_routine" header="Concurence" filter filterPlaceholder="Search by Concurence" style={{ minWidth: '10rem' }} />
                 <Column field="id_terminal_tpe_routine" header="SN" filter filterPlaceholder="Search by SN" style={{ minWidth: '12rem' }} />
                 <Column field="etat_tpe_routine" header="Etat TPE" filter filterPlaceholder="Search by Etat TPE" style={{ minWidth: '12rem' }} />
-                <Column field="etat_chargeur_tpe_routine" header="Etat chargeur" filter filterPlaceholder="Search by Etat chargeur" style={{ minWidth: '8rem' }} />
-                <Column field="probleme_bancaire" header="Probleme bancaire" filter filterPlaceholder="Search by Probleme bancaire" style={{ minWidth: '8rem' }} />
+                {/* <Column field="etat_chargeur_tpe_routine" header="Etat chargeur" filter filterPlaceholder="Search by Etat chargeur" style={{ minWidth: '8rem' }} /> */}
+                {/* <Column field="probleme_bancaire" header="Probleme bancaire" filter filterPlaceholder="Search by Probleme bancaire" style={{ minWidth: '8rem' }} /> */}
                 {/* <Column field="description_problemebancaire" header="Description probleme bancaire" filter filterPlaceholder="Search by Description probleme bancaire" style={{ minWidth: '8rem' }} /> */}
-                <Column field="probleme_mobile" header="Probleme mobile" filter filterPlaceholder="Search by Probleme mobile" style={{ minWidth: '8rem' }} />
+                {/* <Column field="probleme_mobile" header="Probleme mobile" filter filterPlaceholder="Search by Probleme mobile" style={{ minWidth: '8rem' }} /> */}
                 {/* <Column field="description_probleme_mobile" header="Description probleme mobile" filter filterPlaceholder="Search by Description probleme mobile" style={{ minWidth: '8rem' }} /> */}
                 <Column field="commentaire_routine" header="Commentaire routine" filter filterPlaceholder="Search by Commentaire routine" style={{ minWidth: '12rem' }} />
                 <Column field="commenttaire_tpe_routine" header="Commentaire TPE" filter filterPlaceholder="Search by Commentaire TPE" style={{ minWidth: '12rem' }} />

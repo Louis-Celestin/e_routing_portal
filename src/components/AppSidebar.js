@@ -35,9 +35,10 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
-      <CSidebarHeader className="border-bottom">
-        <CSidebarBrand to="/" className='text-center'>
-          <img src={logo} className='w-auto' style={{height:'40px'}} />
+      <CSidebarHeader className="border-bottom h4 fw-bold">
+        <CSidebarBrand to="/" className='text-center w-100 text-decoration-none'>
+          {/* <img src={logo} className='w-auto' style={{height:'40px'}} /> */}
+          <i>Green - Pay</i>  
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"

@@ -57,8 +57,8 @@ export default function RoutingTable() {
             fullName: {value: null, matchMode: 'contains' },
             agent_routing_id: { value: null, matchMode: 'equals' },
             description_routing: { value: null, matchMode: 'contains' },
-            date: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
-            date_fin_routing: { value: null, matchMode: 'contains' }
+            date_debut_routing: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+            date_fin_routing: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
         });
         setGlobalFilterValue('');
     };
@@ -77,7 +77,7 @@ export default function RoutingTable() {
 
     const dateDebutBodyTemplate = (rowData) => {
         const date = new Date(rowData.date_debut_routing);
-        console.log(formatDate(date))
+        console.log(date)
         return isNaN(date) ?'Invalid Date' : formatDate(date);
     };
 
@@ -106,8 +106,8 @@ export default function RoutingTable() {
                 header={header} emptyMessage="No routings found.">
                 <Column field="fullName" header="BDM" filter style={{ minWidth: '8rem' }}></Column>
                 <Column field="description_routing" header="Description" filter filterPlaceholder="Search by Description" style={{ minWidth: '12rem' }} />
-                <Column field="date_debut_routing" header="Start Date" filter filterField='date' style={{ minWidth: '10rem' }} />
-                <Column field="date_fin_routing" header="End Date" filter filterElement={dateFilterTemplate} style={{ minWidth: '10rem' }} />
+                <Column field="date_debut_routing" header="Start Date" sortable filterField={dateFilterTemplate} style={{ minWidth: '10rem' }} />
+                <Column field="date_fin_routing" header="End Date" sortable filterField={dateFilterTemplate} style={{ minWidth: '10rem' }} />
             </DataTable>
         </div>
     );

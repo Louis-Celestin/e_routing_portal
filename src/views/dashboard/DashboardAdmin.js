@@ -223,7 +223,7 @@ export default function DashboardAdmin(){
     <>
       <div className='w-100 bg-gray'>
         <div className='h2'>
-          DASHBOARD ADMIN GENERAL
+        Chiffres des commerciaux
         </div>
       </div>
       {/* <div className="row">

@@ -18,32 +18,32 @@ const NavBar = () => {
       setNavItems([
         {
           component: CNavItem,
-          name: 'Tableau de bord Admin',
+          name: 'Tableau de bord',
           to: '/admin-dashboard',
           icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
         },
         {
           component: CNavGroup,
-          name: 'Routings Généraux',
+          name: 'Routings',
           to: '/admin-routing',
           icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
           items: [
             {
               component: CNavItem,
-              name: 'Tous les Routings',
+              name: 'Routings',
               to: '/admin-routing/admin-routing',
             },
           ],
         },
         {
           component: CNavGroup,
-          name: 'Interventions Générales',
+          name: 'Interventions',
           to: '/admin-routines',
           icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
           items: [
             {
               component: CNavItem,
-              name: 'Toutes les interventions',
+              name: 'Interventions',
               to: '/admin-routines/admin-routines',
             },
           ],
