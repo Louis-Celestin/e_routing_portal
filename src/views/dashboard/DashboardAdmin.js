@@ -241,7 +241,7 @@ export default function DashboardAdmin(){
                       <div className='block rounded-2 my-2 p-3 shadow'>
                         <div className='com-info-block my-3 d-flex align-items-center'>
                           <div className='img-block me-3'>
-                            <img src={avatar6} className='w-auto' style={{borderRadius:100, height:'70px'}}/>
+                            <img src={commercial.agentImage} className='' style={{borderRadius:'50%', height:'70px', width:'70px', objectFit:'cover'}}/>
                           </div>
                           <div className='infos'>
                             <span className='text-wrap'>{commercial.agent}</span>   

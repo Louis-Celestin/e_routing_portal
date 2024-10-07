@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://apigp.onrender.com';
+const API_URL = 'http://51.75.95.225:3000';
 
 export const login = async (username, password) => {
   try {

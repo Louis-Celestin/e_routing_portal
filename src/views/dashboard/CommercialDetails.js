@@ -17,7 +17,10 @@ const routineInfos = new RoutineInfos();
 const CommercialDetails = () =>{
 
     const { id } = useParams();
-    const [loading, setLoading] = useState(false  ); 
+    const [loading, setLoading] = useState(false);
+    const [enCours, setEnCours] = useState(true);
+    const [visite, setVisite] = useState(false);
+    const [interventions, setInterventions] = useState(false); 
     const [commercial, setCommercial] = useState('');
     useEffect(  ()=>{
         console.log(id)
@@ -39,6 +42,22 @@ const CommercialDetails = () =>{
             fetchRoutineInfos();
         }
       },[Number(id)]);
+
+      const button1 = () =>{
+        setEnCours(true)
+        setVisite(false)
+        setInterventions(false)
+      }
+      const button2 = () =>{
+        setEnCours(false)
+        setVisite(true)
+        setInterventions(false)
+      }
+      const button3 = () =>{
+        setEnCours(false)
+        setVisite(false)
+        setInterventions(true)
+      }
     return (
         <>
             {loading? (<ProgressSpinner/>) : 
@@ -61,21 +80,38 @@ const CommercialDetails = () =>{
                                             <div>{commercial.bdmAgent}</div>
                                         </div>
                                         <div className='img-block me-3'>
-                                            <img src={avatar6} className='w-auto' style={{borderRadius:100, height:'120px'}}/>
+                                            <img src={commercial.agentImage} className='' style={{borderRadius:'50%', height:'120px', width:'120px', objectFit:'cover'}}/>
                                         </div>
                                     </div>
                                     <div className='d-flex justify-content-between mt-3 w-100'>
-                                        <Button type='button' label='Routing en cours' severity='secondary' badge={String(commercial.totalPointsMarchands)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
-                                        <Button type='button' label='Marchands visités' severity='secondary' badge={String(commercial.routingsCount)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
-                                        <Button type='button' label='Interventions' severity='secondary' badge={String(commercial.routineEffectués)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
+                                        <Button type='button' label='Routing en cours' severity='secondary' onClick={button1} badge={String(commercial.totalPointsMarchands)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
+                                        <Button type='button' label='Marchands visités' severity='secondary' onClick={button2} badge={String(commercial.routingsCount)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
+                                        <Button type='button' label='Interventions' severity='secondary' onClick={button3} badge={String(commercial.routineEffectués)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
                                     </div>
                                     <div>
                                         <div className='border mt-2 p-1'>
-                                            <DataTable>
+                                            {enCours? (
+                                                <DataTable>
                                                 <Column header='Nom du Point Marchand'></Column>
                                                 <Column header='Période du routing'></Column>
                                                 <Column header='Date de visite'></Column>
-                                            </DataTable>
+                                                </DataTable>
+                                            ) : (
+                                                visite ? (
+                                                    <DataTable>
+                                                        <Column header='Nom des Point Marchand'></Column>
+                                                        <Column header='Période du routing'></Column>
+                                                        <Column header='Date de visite'></Column>
+                                                    </DataTable>
+                                                ) : (
+                                                    <DataTable>
+                                                        <Column header='Nome du Point Marchand'></Column>
+                                                        <Column header='Période du routing'></Column>
+                                                        <Column header='Date de visite'></Column>
+                                                    </DataTable>
+                                                )
+                                            ) }
+                                            
                                         </div>
                                     </div>
 

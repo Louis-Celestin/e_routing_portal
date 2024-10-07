@@ -1,6 +1,6 @@
 import axios from 'axios';
 const urlLocal = "http://172.31.1.58:5500"
-const urlOnline = "https://apigp.onrender.com"
+const urlOnline = "http://51.75.95.225:3000"
 
 const urlBase = urlOnline
 
