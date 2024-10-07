@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import logo from 'src/assets/images/logo/logo.jpeg'
+// import logo from 'src/assets/images/logo/logo.jpeg'
 import {
   CCloseButton,
   CSidebar,

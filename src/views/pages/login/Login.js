@@ -47,7 +47,7 @@ const Login = () => {
       window.sessionStorage.setItem('user_type', response.user.agent.type_agent_id);
       window.sessionStorage.setItem('bdmId', response.bdmId);
       const bdmId = window.sessionStorage.getItem('bdmId');
-      console.log(bdmId)
+      console.log("BDM ID : ", bdmId)
       const user_type = window.sessionStorage.getItem('user_type');
       console.log(user_type)
       if(user_type === '9'){

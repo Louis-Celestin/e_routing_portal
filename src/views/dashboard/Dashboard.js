@@ -89,13 +89,10 @@ const Dashboard = () => {
       try{
         let data;
         if (dates && dates.length === 2){
-          const startDate = dates[0];
-          const endDate = dates[1];
+          const [startDate, endDate] = dates;
           console.log(formatDate(startDate))
           console.log(formatDate(endDate))
           data = await routineInfos.getRoutineInfosByDateRange(formatDate(startDate), formatDate(endDate));
-          console.log(startDate)
-          console.log(endDate)
         } else{
           data = await routineInfos.getRoutineInfos();
         }
@@ -241,7 +238,7 @@ const Dashboard = () => {
       </div>
       <div className="row">
         <div className='col-3 my-5'>
-            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection showIcon touchUI showButtonBar/>
+            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput showIcon hideOnRangeSelection touchUI showButtonBar/>
         </div>
       </div>
       <section>
@@ -274,7 +271,7 @@ const Dashboard = () => {
                           </div>
                           <div className='text-info d-flex justify-content-between'>
                             <span>Interventions :</span>
-                            <span className='fw-bold'>{commercial.routinesCount}</span>
+                            <span className='fw-bold'>{commercial.routineEffectués}</span>
                           </div>
                         </div>
                         <div>

@@ -10,8 +10,8 @@ export class RoutineInfos {
         try {
             const response = await axios.post(`${urlBase}/api/getRoutineInfosByDateRange`,
                 { bdmId: window.sessionStorage.getItem('bdmId'), 
-                  startDate: startDateValue,
-                  endDate: endDateValue
+                  dateDebut: startDateValue,
+                  dateFin: endDateValue
                 }, // Données envoyées en JSON
         {  headers: {
             'Content-Type': 'application/json', // Définir le type de contenu
