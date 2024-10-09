@@ -106,14 +106,14 @@ const CommercialDetails = () =>{
                                             ) : (
                                                 visite ? (
                                                     <DataTable>
-                                                        <Column header='Nom des Point Marchand'></Column>
+                                                        <Column header='Nom du Point Marchand'></Column>
                                                         <Column header='Période du routing'></Column>
                                                         <Column header='Date de visite'></Column>
                                                     </DataTable>
                                                 ) : (
                                                     <DataTable>
-                                                        <Column header='Nome du Point Marchand'></Column>
-                                                        <Column header='Période du routing'></Column>
+                                                        <Column header='Nom du Point Marchand'></Column>
+                                                        {/* <Column header='Période du routing'></Column> */}
                                                         <Column header='Date de visite'></Column>
                                                     </DataTable>
                                                 )
