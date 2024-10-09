@@ -8,7 +8,7 @@ export class RoutineService {
 
   async getRoutingByBdm() {
     try {
-      const response = await axios.post(`${urlBase}/api/getRoutingByBdm`,// Données envoyées en JSON
+      const response = await axios.post("/api/getRoutingByBdm",// Données envoyées en JSON
         { bdmId: window.sessionStorage.getItem('bdmId') }, // Données envoyées en JSON
         {  headers: {
             'Content-Type': 'application/json', // Définir le type de contenu

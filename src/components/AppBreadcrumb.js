@@ -44,26 +44,28 @@ const AppBreadcrumb = () => {
   const breadcrumbs = getBreadcrumbs(currentLocation)
 
   return (
-    <CBreadcrumb className="my-0">
-      {isDC ? (
-        <CBreadcrumbItem href="/admin-dashboard">Home</CBreadcrumbItem>
-      ) : 
-      (
-        <CBreadcrumbItem href="/">Home</CBreadcrumbItem>
-      )
-      }
-      
-      {breadcrumbs.map((breadcrumb, index) => {
-        return (
-          <CBreadcrumbItem
-            {...(breadcrumb.active ? { active: true } : { href: breadcrumb.pathname })}
-            key={index}
-          >
-            {breadcrumb.name}
-          </CBreadcrumbItem>
+    <>
+      {/* <CBreadcrumb className="my-0">
+        {isDC ? (
+          <CBreadcrumbItem href="/admin-dashboard">Home</CBreadcrumbItem>
+        ) : 
+        (
+          <CBreadcrumbItem href="/">Home</CBreadcrumbItem>
         )
-      })}
-    </CBreadcrumb>
+        }
+        
+        {breadcrumbs.map((breadcrumb, index) => {
+          return (
+            <CBreadcrumbItem
+              {...(breadcrumb.active ? { active: true } : { href: breadcrumb.pathname })}
+              key={index}
+            >
+              {breadcrumb.name}
+            </CBreadcrumbItem>
+          )
+        })}
+      </CBreadcrumb> */}
+    </>
   )
 }
 
