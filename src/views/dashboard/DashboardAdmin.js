@@ -237,7 +237,7 @@ export default function DashboardAdmin(){
               (
                   <>
                     {commercials.map((commercial) => (
-                    <div className='col-3'>
+                    <div className='col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-6'>
                       <div className='block rounded-2 my-2 p-3 shadow'>
                         <div className='com-info-block my-3 d-flex align-items-center'>
                           <div className='img-block me-3'>

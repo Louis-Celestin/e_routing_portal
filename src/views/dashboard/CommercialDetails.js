@@ -11,6 +11,12 @@ import 'primeicons/primeicons.css';
 import { useParams } from 'react-router-dom';
 import { RoutineInfos } from '../../apis/services/RoutineInfos';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { MapContainer } from 'react-leaflet/MapContainer'
+import { TileLayer } from 'react-leaflet/TileLayer'
+import { useMap } from 'react-leaflet/hooks'
+import { Marker } from 'react-leaflet/Marker';
+import { Popup } from 'react-leaflet/Popup';
+import "leaflet/dist/leaflet.css"
 
 const routineInfos = new RoutineInfos();
 
@@ -23,6 +29,7 @@ const CommercialDetails = () =>{
     const [interventions, setInterventions] = useState(false); 
     const [commercial, setCommercial] = useState('');
     useEffect(  ()=>{
+       
         console.log(id)
         if(id){
             const fetchRoutineInfos = async () => {
@@ -70,7 +77,7 @@ const CommercialDetails = () =>{
                 <section>
                     <div className='container'>
                         <div className='row'>
-                            <div className='col-7'>
+                            <div className='col-xxl-7 my-1 col-xl-8 col-sm-12'>
                                 <div className='border h-100 rounded-4 p-3 shadow'>
                                     <div className='d-flex justify-content-between align-items-center'>
                                         <div>
@@ -117,8 +124,8 @@ const CommercialDetails = () =>{
 
                                 </div>
                             </div>
-                            <div className='col'>
-                                <div className='border h-100 rounded-4 p3 shadow'>
+                            <div className='col-xxl-5 my-1 col-xl-4 col-sm-12'>
+                                <div className='border h-100 rounded-4 p-3 shadow'>
                                     <div className='d-flex flex-column align-items-center h-100'>
                                         <div className='text-center mt-2'>Marchands visités</div>
                                         <div className=''>
@@ -141,6 +148,21 @@ const CommercialDetails = () =>{
                                             />
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div className='col-12'>
+                                <div className='border' style={{height:'200px'}}>
+                                    {/* <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <Marker position={[51.505, -0.09]}>
+                                            <Popup>
+                                            A pretty CSS3 popup. <br /> Easily customizable.
+                                            </Popup>
+                                        </Marker>
+                                    </MapContainer> */}
                                 </div>
                             </div>
                         </div>
