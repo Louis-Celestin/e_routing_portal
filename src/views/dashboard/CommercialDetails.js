@@ -53,7 +53,8 @@ const CommercialDetails = () =>{
                 if(fin || fin === 'null'){
                     data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), debut, fin);
                     console.log(data[0].agent)
-                }else{
+                }
+                else{
                     data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
                     console.log(data[0].agent)
                 }
@@ -177,9 +178,9 @@ const CommercialDetails = () =>{
                             <div className='col-xxl-5 my-1 col-xl-4 col-sm-12'>
                                 <div className='border h-100 rounded-4 p-3 shadow'>
                                     <div className='d-flex flex-column align-items-center h-100'>
-                                        <div className='my-5 py-5 w-100 text-center border-bottom'>
+                                        {/* <div className='my-5 py-5 w-100 text-center border-bottom'>
                                             <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput showIcon hideOnRangeSelection touchUI showButtonBar/>
-                                        </div>
+                                        </div> */}
                                         <div className='text-center mt-2'>Marchands visités</div>
                                         <div className=''>
                                             <Gauge
