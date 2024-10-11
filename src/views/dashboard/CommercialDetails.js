@@ -14,6 +14,7 @@ import { InputText } from 'primereact/inputtext';
 import { RoutineInfos } from '../../apis/services/RoutineInfos';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useLocation } from 'react-router-dom';
+import { Calendar } from 'primereact/calendar';
 import { MapContainer } from 'react-leaflet/MapContainer'
 import { TileLayer } from 'react-leaflet/TileLayer'
 import { useMap } from 'react-leaflet/hooks'
@@ -35,6 +36,7 @@ const CommercialDetails = () =>{
     const [enCours, setEnCours] = useState(true);
     const [visite, setVisite] = useState(false);
     const [interventions, setInterventions] = useState(false);
+    const [dates, setDates] = useState(null);
     const [filters, setFilters] = useState(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [commercial, setCommercial] = useState('');
@@ -175,6 +177,9 @@ const CommercialDetails = () =>{
                             <div className='col-xxl-5 my-1 col-xl-4 col-sm-12'>
                                 <div className='border h-100 rounded-4 p-3 shadow'>
                                     <div className='d-flex flex-column align-items-center h-100'>
+                                        <div className='my-5 py-5 w-100 text-center border-bottom'>
+                                            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput showIcon hideOnRangeSelection touchUI showButtonBar/>
+                                        </div>
                                         <div className='text-center mt-2'>Marchands visités</div>
                                         <div className=''>
                                             <Gauge
