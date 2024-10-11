@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-// import logo from 'src/assets/images/logo/logo.jpeg'
+import logo from 'src/assets/images/logo/gpLogo.png'
 import {
   CCloseButton,
   CSidebar,
@@ -35,9 +35,9 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: visible })
       }}
     >
-      <CSidebarHeader className="border-bottom h4 fw-bold">
-        <CSidebarBrand to="/" className='text-center w-100 text-decoration-none'>
-          {/* <img src={logo} className='w-auto' style={{height:'40px'}} /> */}
+      <CSidebarHeader className="border-bottom h5 fw-semi-bold user-select-none">
+        <CSidebarBrand to="/" className='d-flex justify-content-center align-items-center w-100 text-decoration-none'>
+          <img src={logo} className='w-auto' style={{height:'33px'}} />
           <i>Green - Pay</i>  
         </CSidebarBrand>
         <CCloseButton
