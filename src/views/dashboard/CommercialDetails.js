@@ -9,8 +9,11 @@ import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primeicons/primeicons.css';
 import { useParams } from 'react-router-dom';
+import { FilterMatchMode, FilterOperator } from 'primereact/api';
+import { InputText } from 'primereact/inputtext';
 import { RoutineInfos } from '../../apis/services/RoutineInfos';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { useLocation } from 'react-router-dom';
 import { MapContainer } from 'react-leaflet/MapContainer'
 import { TileLayer } from 'react-leaflet/TileLayer'
 import { useMap } from 'react-leaflet/hooks'
@@ -22,12 +25,21 @@ const routineInfos = new RoutineInfos();
 
 const CommercialDetails = () =>{
 
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const debut = queryParams.get('debut');
+    const fin = queryParams.get('fin');
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [enCours, setEnCours] = useState(true);
     const [visite, setVisite] = useState(false);
-    const [interventions, setInterventions] = useState(false); 
+    const [interventions, setInterventions] = useState(false);
+    const [filters, setFilters] = useState(null);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [commercial, setCommercial] = useState('');
+
+    
     useEffect(  ()=>{
        
         console.log(id)
@@ -36,8 +48,13 @@ const CommercialDetails = () =>{
               setLoading(true);
               try{
                 let data;
-                data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
-                console.log(data[0].agent)
+                if(fin || fin === 'null'){
+                    data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), debut, fin);
+                    console.log(data[0].agent)
+                }else{
+                    data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
+                    console.log(data[0].agent)
+                }
                 setCommercial(data[0]);
               } catch(error){
                 console.error('Error fetching data', error);
@@ -65,6 +82,40 @@ const CommercialDetails = () =>{
         setVisite(false)
         setInterventions(true)
       }
+
+      const clearFilter = () => {
+        initFilters();
+    };
+
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        let _filters = { ...filters };
+
+        _filters['global'].value = value;
+        setFilters(_filters);
+        setGlobalFilterValue(value);
+    };
+
+    const initFilters = () => {
+        setFilters({
+            nom_Pm: { value: null, matchMode: 'contains' },
+        });
+        setGlobalFilterValue('');
+    };
+
+    const renderHeader = () => {
+        return (
+            <>
+                <div className="flex justify-content-between">
+                    <Button type="button" icon="pi pi-filter-slash" label="Clear" outlined onClick={clearFilter} />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+                </div>
+            </>
+        );
+    };
+
+    const header = renderHeader();
+
     return (
         <>
             {loading? (<ProgressSpinner/>) : 
@@ -92,28 +143,25 @@ const CommercialDetails = () =>{
                                     </div>
                                     <div className='d-flex justify-content-between mt-3 w-100'>
                                         <Button type='button' label='Routing en cours' severity='secondary' onClick={button1} badge={String(commercial.totalPointsMarchands)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
-                                        <Button type='button' label='Marchands visités' severity='secondary' onClick={button2} badge={String(commercial.routingsCount)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
+                                        <Button type='button' label='Marchands visités' severity='secondary' onClick={button2} badge={String(commercial.routinesCount)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
                                         <Button type='button' label='Interventions' severity='secondary' onClick={button3} badge={String(commercial.routineEffectués)} icon='pi pi-angle-down' style={{fontSize:"11px"}} />
                                     </div>
                                     <div>
                                         <div className='border mt-2 p-1'>
                                             {enCours? (
-                                                <DataTable>
-                                                <Column header='Nom du Point Marchand'></Column>
-                                                <Column header='Période du routing'></Column>
-                                                <Column header='Date de visite'></Column>
+                                                <DataTable value={commercial.listePmAvisiter} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
+                                                    <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
+                                                    <Column header='Date de visite'></Column>
                                                 </DataTable>
                                             ) : (
                                                 visite ? (
-                                                    <DataTable>
-                                                        <Column header='Nom du Point Marchand'></Column>
-                                                        <Column header='Période du routing'></Column>
+                                                    <DataTable value={commercial.listePmroutinesVisités} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
+                                                        <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
                                                         <Column header='Date de visite'></Column>
                                                     </DataTable>
                                                 ) : (
-                                                    <DataTable>
-                                                        <Column header='Nom du Point Marchand'></Column>
-                                                        {/* <Column header='Période du routing'></Column> */}
+                                                    <DataTable value={commercial.listeInterventios} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
+                                                        <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
                                                         <Column header='Date de visite'></Column>
                                                     </DataTable>
                                                 )
@@ -136,8 +184,8 @@ const CommercialDetails = () =>{
                                                 left:30,
                                                 bottom: 0,
                                                 }}
-                                                value={commercial.routingsCount}
-                                                valueMax={commercial.totalPointsMarchands}
+                                                value={commercial.totalPointsMarchands}
+                                                valueMax={commercial.routingsCount}
                                                 // startAngle={-90}
                                                 // endAngle={90}
                                                 text={
@@ -148,21 +196,6 @@ const CommercialDetails = () =>{
                                             />
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div className='col-12'>
-                                <div className='border' style={{height:'200px'}}>
-                                    {/* <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
-                                        <TileLayer
-                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />
-                                        <Marker position={[51.505, -0.09]}>
-                                            <Popup>
-                                            A pretty CSS3 popup. <br /> Easily customizable.
-                                            </Popup>
-                                        </Marker>
-                                    </MapContainer> */}
                                 </div>
                             </div>
                         </div>

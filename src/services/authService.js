@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_URL = 'http://51.75.95.225:3000';
+const urlLocal = "http://172.31.1.74:5500"
+const urlOnline = "http://51.75.95.225:3000"
+
+const API_URL = urlOnline
 
 export const login = async (username, password) => {
   try {

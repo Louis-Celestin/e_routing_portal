@@ -1,5 +1,5 @@
 import axios from 'axios';
-const urlLocal = "http://172.31.1.84:5500"
+const urlLocal = "http://172.31.1.74:5500"
 const urlOnline = "http://51.75.95.225:3000"
 
 const urlBase = urlOnline

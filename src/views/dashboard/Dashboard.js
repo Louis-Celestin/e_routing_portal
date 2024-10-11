@@ -74,9 +74,11 @@ import { Link } from 'react-router-dom';
 const Dashboard = () => {
 
   const [commercials, setCommercials] = useState([]);
-  const [loading, setLoading] = useState(false  ); 
+  const [loading, setLoading] = useState(false); 
   const routineInfos = new RoutineInfos();
   const [dates, setDates] = useState(null);
+  const [debut, setDebut] = useState('');
+  const [fin, setFin] = useState('');
   
   const formatDate = (date) => {
     return date.toISOString().slice(0, 10); // Convert to "YYYY-MM-DD"
@@ -92,6 +94,8 @@ const Dashboard = () => {
           const [startDate, endDate] = dates;
           console.log(formatDate(startDate))
           console.log(formatDate(endDate))
+          setDebut(formatDate(startDate))
+          setFin(formatDate(endDate))
           data = await routineInfos.getRoutineInfosByDateRange(formatDate(startDate), formatDate(endDate));
         } else{
           data = await routineInfos.getRoutineInfos();
@@ -263,11 +267,11 @@ const Dashboard = () => {
                         <div className='border-bottom d-flex flex-column justify-content-between'>
                           <div className='text-info d-flex justify-content-between'>
                             <span className='fz-6'>Routings demandés :</span>
-                            <span className='fw-bold'>{commercial.totalPointsMarchands}</span>
+                            <span className='fw-bold'>{commercial.routingsCount}</span>
                           </div>
                           <div className='text-info d-flex justify-content-between'>
                             <span>Routings éffectués :</span>
-                            <span className='fw-bold'>{commercial.routingsCount}</span>
+                            <span className='fw-bold'>{commercial.totalPointsMarchands}</span>
                           </div>
                           <div className='text-info d-flex justify-content-between'>
                             <span>Interventions :</span>
@@ -282,8 +286,8 @@ const Dashboard = () => {
                               left:30,
                               bottom: 0,
                             }}
-                            value={commercial.routingsCount}
-                            valueMax={commercial.totalPointsMarchands}
+                            value={commercial.totalPointsMarchands}
+                            valueMax={commercial.routingsCount}
                             // startAngle={-90}
                             // endAngle={90}
                             text={
@@ -294,7 +298,7 @@ const Dashboard = () => {
                         />
                         </div>
                         <div>
-                            <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}`} style={{cursor:'pointer'}}>Voir plus</Link>
+                            <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}?debut=${debut}&fin=${fin}`} style={{cursor:'pointer'}}>Voir plus</Link>
                         </div>
                       </div>
                     </div>
