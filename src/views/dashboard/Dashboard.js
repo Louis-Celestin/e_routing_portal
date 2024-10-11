@@ -267,11 +267,11 @@ const Dashboard = () => {
                         <div className='border-bottom d-flex flex-column justify-content-between'>
                           <div className='text-info d-flex justify-content-between'>
                             <span className='fz-6'>Routings demandés :</span>
-                            <span className='fw-bold'>{commercial.routingsCount}</span>
+                            <span className='fw-bold'>{commercial.totalPointsMarchands}</span>
                           </div>
                           <div className='text-info d-flex justify-content-between'>
                             <span>Routings éffectués :</span>
-                            <span className='fw-bold'>{commercial.totalPointsMarchands}</span>
+                            <span className='fw-bold'>{commercial.routinesCount}</span>
                           </div>
                           <div className='text-info d-flex justify-content-between'>
                             <span>Interventions :</span>
@@ -286,8 +286,8 @@ const Dashboard = () => {
                               left:30,
                               bottom: 0,
                             }}
-                            value={commercial.totalPointsMarchands}
-                            valueMax={commercial.routingsCount}
+                            value={commercial.routinesCount}
+                            valueMax={commercial.totalPointsMarchands}
                             // startAngle={-90}
                             // endAngle={90}
                             text={

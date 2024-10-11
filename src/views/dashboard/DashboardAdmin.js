@@ -165,15 +165,15 @@ export default function DashboardAdmin(){
                         <div className='border-bottom d-flex flex-column justify-content-between'>
                           <div className='text-info d-flex justify-content-between'>
                             <span className='fz-6'>Routings demandés :</span>
-                            <span className='fw-bold'>{commercial.routingsCount}</span>
-                          </div>
-                          <div className='text-info d-flex justify-content-between'>
-                            <span>Routings éffectués :</span>
                             <span className='fw-bold'>{commercial.totalPointsMarchands}</span>
                           </div>
                           <div className='text-info d-flex justify-content-between'>
-                            <span>Interventions :</span>
+                            <span>Routings éffectués :</span>
                             <span className='fw-bold'>{commercial.routinesCount}</span>
+                          </div>
+                          <div className='text-info d-flex justify-content-between'>
+                            <span>Interventions :</span>
+                            <span className='fw-bold'>{commercial.routineEffectués}</span>
                           </div>
                         </div>
                         <div>
@@ -184,8 +184,8 @@ export default function DashboardAdmin(){
                               left:30,
                               bottom: 0,
                             }}
-                            value={commercial.totalPointsMarchands}
-                            valueMax={commercial.routingsCount}
+                            value={commercial.routinesCount}
+                            valueMax={commercial.totalPointsMarchands}
                             // startAngle={-90}
                             // endAngle={90}
                             text={
