@@ -189,8 +189,8 @@ const CommercialDetails = () =>{
                                                 left:30,
                                                 bottom: 0,
                                                 }}
-                                                value={commercial.totalPointsMarchands}
-                                                valueMax={commercial.routingsCount}
+                                                value={commercial.routinesCount}
+                                                valueMax={commercial.totalPointsMarchands}
                                                 // startAngle={-90}
                                                 // endAngle={90}
                                                 text={
