@@ -78,8 +78,8 @@ export default function DashboardAdmin(){
   const [loading, setLoading] = useState(false  ); 
   const routineInfos = new RoutineInfos();
   const [dates, setDates] = useState(null);
-  const [debut, setDebut] = useState('');
-  const [fin, setFin] = useState('');
+  const [debut, setDebut] = useState(null);
+  const [fin, setFin] = useState(null);
 
   const formatDate = (date) => {
     return date.toISOString().slice(0, 10); // Convert to "YYYY-MM-DD"

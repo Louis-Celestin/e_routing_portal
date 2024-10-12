@@ -45,17 +45,18 @@ const CommercialDetails = () =>{
     useEffect(  ()=>{
        
         console.log(id)
+        console.log(fin)
         if(id){
             const fetchRoutineInfos = async () => {
               setLoading(true);
               try{
                 let data;
-                if(fin || fin === 'null'){
-                    data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), debut, fin);
+                if(fin === 'null'){
+                    data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
                     console.log(data[0].agent)
                 }
                 else{
-                    data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
+                    data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), debut, fin);
                     console.log(data[0].agent)
                 }
                 setCommercial(data[0]);
@@ -154,18 +155,18 @@ const CommercialDetails = () =>{
                                             {enCours? (
                                                 <DataTable value={commercial.listePmAvisiter} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
                                                     <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
-                                                    <Column header='Date de visite'></Column>
+                                                    {/* <Column header='Date de visite'></Column> */}
                                                 </DataTable>
                                             ) : (
                                                 visite ? (
                                                     <DataTable value={commercial.listePmroutinesVisités} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
                                                         <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
-                                                        <Column header='Date de visite'></Column>
+                                                        {/* <Column header='Date de visite'></Column> */}
                                                     </DataTable>
                                                 ) : (
                                                     <DataTable value={commercial.listeInterventios} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
                                                         <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
-                                                        <Column header='Date de visite'></Column>
+                                                        {/* <Column header='Date de visite'></Column> */}
                                                     </DataTable>
                                                 )
                                             ) }

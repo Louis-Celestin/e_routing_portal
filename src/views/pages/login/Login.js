@@ -23,7 +23,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { login } from '../../../services/authService'
+import { login } from '../../../apis/services/authService';
 
 const Login = () => {
   
