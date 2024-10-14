@@ -15,6 +15,7 @@ import { RoutineInfos } from '../../apis/services/RoutineInfos';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { useLocation } from 'react-router-dom';
 import { Calendar } from 'primereact/calendar';
+import { Link } from 'react-router-dom';
 import { MapContainer } from 'react-leaflet/MapContainer'
 import { TileLayer } from 'react-leaflet/TileLayer'
 import { useMap } from 'react-leaflet/hooks'
@@ -31,6 +32,8 @@ const CommercialDetails = () =>{
     const queryParams = new URLSearchParams(location.search);
     const debut = queryParams.get('debut');
     const fin = queryParams.get('fin');
+    const [debutValue, setDebut] = useState(null);
+    const [finValue, setFin] = useState(null);
     const { id } = useParams();
     const [loading, setLoading] = useState(false);
     const [enCours, setEnCours] = useState(true);
@@ -41,6 +44,9 @@ const CommercialDetails = () =>{
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [commercial, setCommercial] = useState('');
 
+    const formatDate = (date) => {
+        return date.toISOString().slice(0, 10); // Convert to "YYYY-MM-DD"
+      };
     
     useEffect(  ()=>{
        
@@ -52,12 +58,27 @@ const CommercialDetails = () =>{
               try{
                 let data;
                 if(fin === 'null'){
-                    data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
-                    console.log(data[0].agent)
+                    if(dates && dates.length === 2){
+                        const [dateDebut, dateFin] = dates
+                        data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), formatDate(dateDebut), formatDate(dateFin))
+                        console.log('Calendar')
+                    }else{
+                        data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
+                        console.log(data[0].agent)
+                    }
                 }
                 else{
-                    data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), debut, fin);
-                    console.log(data[0].agent)
+                    if(dates && dates.length === 2){
+                        const [dateDebut, dateFin] = dates
+                        data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), formatDate(dateDebut), formatDate(dateFin))
+                        console.log('Calendar')
+                    }else{
+                        setDebut(debut)
+                        setFin(fin)
+                        console.log(debutValue)
+                        data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), debutValue, finValue);
+                        console.log(data[0].agent)
+                    }
                 }
                 setCommercial(data[0]);
               } catch(error){
@@ -69,7 +90,7 @@ const CommercialDetails = () =>{
             };
             fetchRoutineInfos();
         }
-      },[Number(id)]);
+      },[Number(id),dates,debutValue,finValue]);
 
       const button1 = () =>{
         setEnCours(true)
@@ -90,6 +111,11 @@ const CommercialDetails = () =>{
       const clearFilter = () => {
         initFilters();
     };
+    
+    const clearDateFilter = () => {
+        setFin(null)
+        setDebut(null)
+    }
 
     const onGlobalFilterChange = (e) => {
         const value = e.target.value;
@@ -161,12 +187,12 @@ const CommercialDetails = () =>{
                                                 visite ? (
                                                     <DataTable value={commercial.listePmroutinesVisités} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
                                                         <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
-                                                        {/* <Column header='Date de visite'></Column> */}
+                                                        <Column header='Date de visite'></Column>
                                                     </DataTable>
                                                 ) : (
                                                     <DataTable value={commercial.listeInterventios} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
                                                         <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
-                                                        {/* <Column header='Date de visite'></Column> */}
+                                                        <Column field='date' sortable header='Date de visite'></Column>
                                                     </DataTable>
                                                 )
                                             ) }
@@ -179,9 +205,12 @@ const CommercialDetails = () =>{
                             <div className='col-xxl-5 my-1 col-xl-4 col-sm-12'>
                                 <div className='border h-100 rounded-4 p-3 shadow'>
                                     <div className='d-flex flex-column align-items-center h-100'>
-                                        {/* <div className='my-5 py-5 w-100 text-center border-bottom'>
-                                            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput showIcon hideOnRangeSelection touchUI showButtonBar/>
+                                        {/* <div className='text-center w-100'>
+                                           <Link  to={`/details/${commercial.id}?debut=${null}&fin=${null}`}> <Button type="button" icon="pi pi-filter-slash" label="Today" outlined/> </Link> 
                                         </div> */}
+                                        <div className='my-5 py-5 w-100 text-center border-bottom'>
+                                            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput showIcon hideOnRangeSelection touchUI showButtonBar/>
+                                        </div>
                                         <div className='text-center mt-2'>Marchands visités</div>
                                         <div className=''>
                                             <Gauge
