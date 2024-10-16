@@ -196,7 +196,7 @@ export default function DashboardAdmin(){
                         />
                         </div>
                         <div>
-                        <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}?debut=${debut}&fin=${fin}`} style={{cursor:'pointer'}}>Voir plus</Link>
+                          <Link className='btn btn-link text-decoration-none link-dark' to={`/details/${commercial.id}?debut=${debut}&fin=${fin}`} style={{cursor:'pointer'}}>Voir plus</Link>
                         </div>
                       </div>
                     </div>

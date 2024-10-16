@@ -46,6 +46,7 @@ const Login = () => {
       window.sessionStorage.setItem('name', response.user.username_user);
       window.sessionStorage.setItem('user_type', response.user.agent.type_agent_id);
       window.sessionStorage.setItem('bdmId', response.bdmId);
+      window.sessionStorage.setItem('user_image', response.image_profile_user);
       const bdmId = window.sessionStorage.getItem('bdmId');
       console.log("BDM ID : ", bdmId)
       const user_type = window.sessionStorage.getItem('user_type');
