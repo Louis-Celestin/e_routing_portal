@@ -97,20 +97,16 @@ const CommercialDetails = () =>{
                 }
                 setCommercial(data[0]);
                 if (data[0].listePmAvisiter > 0){
-                    if(data[0].listePmAvisiter === data[0].totalPointsMarchands){
+                    if(data[0].totalPointsMarchands >= data[0].listePmAvisiter){
                         setBadge1('p-badge-success')
+                        setBadge2('p-badge-success')
+                    }else if(data[0].listePmAvisiter > data[0].totalPointsMarchands){
+                        setBadge1('')
+                        setBadge2('p-badge-warning')
                     }else{
                         setBadge1('')
+                        setBadge2('')
                     }
-                }
-                if (data[0].totalPointsMarchands > 0){
-                    if(data[0].totalPointsMarchands >= data[0].listePmAvisiter){
-                        setBadge2('p-badge-success')
-                    }else{
-                        setBadge2('p-badge-warning')
-                    }
-                }else{
-                    setBadge2('')
                 }
                 if (data[0].routineEffectués > 0){
                     if(data[0].routineEffectués >= 7){

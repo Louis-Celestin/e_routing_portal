@@ -5,6 +5,9 @@ import { Calendar } from 'primereact/calendar';
 import { Gauge } from '@mui/x-charts';
 import { RoutineInfos } from '../../apis/services/RoutineInfos';  
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputText } from 'primereact/inputtext';
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
 import 'primeflex/primeflex.css';  
 import 'primereact/resources/primereact.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -80,6 +83,7 @@ export default function DashboardAdmin(){
   const [dates, setDates] = useState(null);
   const [debut, setDebut] = useState(null);
   const [fin, setFin] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const formatDate = (date) => {
     return date.toISOString().slice(0, 10); // Convert to "YYYY-MM-DD"
@@ -129,6 +133,10 @@ export default function DashboardAdmin(){
     };
     fetchRoutineInfos();
   }, [dates]);
+
+  const filteredAgents = commercials.filter((commercial) =>
+    commercial.agent.toLowerCase().includes(searchQuery.toLowerCase())
+  );
     
 
   return (
@@ -139,8 +147,16 @@ export default function DashboardAdmin(){
         </div>
       </div>
       <div className="row">
-        <div className='col-3 my-5'>
-            <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection showIcon touchUI showButtonBar/>
+        <div className='col-12 d-flex justify-content-between my-5'>
+            <div className='me-3'>
+              <Calendar variant='filled' value={dates} onChange={(e) => setDates(e.value)} selectionMode="range" readOnlyInput hideOnRangeSelection showIcon touchUI showButtonBar/>
+            </div>
+            <div className=''>
+              <IconField iconPosition="left">
+                <InputIcon className="pi pi-search"> </InputIcon>
+                <InputText placeholder="Search by agent name" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+              </IconField>
+            </div>
         </div>
       </div>
       <section>
@@ -148,7 +164,7 @@ export default function DashboardAdmin(){
             {loading ? (<ProgressSpinner />) :
               (
                   <>
-                    {commercials.map((commercial) => (
+                    {filteredAgents.map((commercial) => (
                     <div className='col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-6'>
                       <div className='block rounded-2 my-2 p-3 shadow'>
                         <div className='com-info-block my-3 d-flex align-items-center'>
