@@ -62,6 +62,8 @@ const CommercialDetails = React.lazy(()=>import('./views/dashboard/CommercialDet
 const DashboardAdmin = React.lazy(()=>import('./views/dashboard/DashboardAdmin'))
 const AllRoutingsAdmin = React.lazy(()=>import('./views/routing/AllRoutings/AllRoutingsAdmin'))
 const AllRoutinesAdmin = React.lazy(()=>import('./views/routines/AllRoutines/AllRoutinesAdmin'))
+const ResetPassword = React.lazy(()=>import('./views/pages/login/ResetPassword'))
+const RoutineDetails = React.lazy(()=>import('./views/routines/AllRoutines/RoutineDetails'))
 
 
 const routes = [
@@ -142,11 +144,21 @@ const routes = [
   },
   { path: '/routines', name: 'Routines', element:<ProtectedRoute><AllRoutines/></ProtectedRoute> , exact: true },
   { path: '/routines/all-routines', name: 'All Routines', element: <ProtectedRoute><AllRoutines/></ProtectedRoute> },
+  { 
+    path: '/routine-details/:idRoutine', 
+    name: 'Routine Details', 
+    element:<ProtectedRoute><RoutineDetails/></ProtectedRoute> , 
+  },
   {
     path: '/login',
     name: 'Login',
     element: <Login />,
   },
+  // {
+  //   path: '/reset-password',
+  //   name: 'ResetPassword',
+  //   element: <ResetPassword />,
+  // },
   {
     path: '/details/:id',
     name: 'CommercialDetails',

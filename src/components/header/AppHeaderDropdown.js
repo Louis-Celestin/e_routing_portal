@@ -12,8 +12,10 @@ import {
 import {
   cilUser,
   cilAccountLogout,
+  cilLockLocked
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import { Link } from 'react-router-dom'
 
 import user_profile from './../../assets/images/avatars/user_profile.png'
 
@@ -56,6 +58,12 @@ const AppHeaderDropdown = () => {
         {/* <CDropdownItem href="#">
           <CIcon icon={cilUser} className="me-2" />
           Profile
+        </CDropdownItem> */}
+        {/* <CDropdownItem>
+          <Link to={"/reset-password"} className='text-decoration-none'>
+            <CIcon icon={cilLockLocked} className='me-2' />
+            Reset password
+          </Link>
         </CDropdownItem> */}
         <CDropdownDivider />
         <CDropdownItem href='#'  onClick={handleLogout} >

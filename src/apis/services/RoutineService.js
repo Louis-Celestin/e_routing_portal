@@ -96,4 +96,22 @@ try{
     }
   }
 
+  async getOneRoutine(idRoutineValue) {
+    try {
+      const response = await axios.post(`${urlBase}/api/getOneRoutine`,// Données envoyées en JSON
+        { agentTypeid: Number(window.sessionStorage.getItem('user_type')),
+          idRoutine: idRoutineValue,
+        }, // Données envoyées en JSON
+        {  headers: {
+            'Content-Type': 'application/json', // Définir le type de contenu
+          }});
+        console.log(response.data)
+      return response.data;
+
+    } catch (error) {
+      console.error('Erreur lors de la récupération du routing:', error);
+      throw error;
+    }
+  }
+
 }

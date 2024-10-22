@@ -76,7 +76,6 @@ const CommercialDetails = () =>{
                     if(dates && dates.length === 2){
                         const [dateDebut, dateFin] = dates
                         data = await routineInfos.getRoutineInfosForDcByCommercialByDateRange(Number(id), formatDate(dateDebut), formatDate(dateFin))
-                        console.log('Calendar')
                     }else{
                         data = await routineInfos.getRoutineInfosForDcByCommercial(Number(id));
                         console.log(data[0].agent)
@@ -183,6 +182,12 @@ const CommercialDetails = () =>{
 
     const header = renderHeader();
 
+    const NomPMcontent = (rowData) =>{
+        return <Link to={`/routine-details/${rowData.idRoutine}`} className='text-decoration-none link-dark link-opacity-75 link-opacity-100-hover d-flex justify-content-between'>
+                    <span>{rowData.nom_Pm}</span>
+               </Link>
+    }
+
     return (
         <>
             {loading? (<ProgressSpinner/>) : 
@@ -228,7 +233,7 @@ const CommercialDetails = () =>{
                                                     </DataTable>
                                                 ) : (
                                                     <DataTable value={commercial.listeInterventios} paginator showGridlines rows={5} filters={filters} globalFilterFields={['nom_Pm']} header={header} emptyMessage="No data found.">
-                                                        <Column field='nom_Pm' filter header='Nom du Point Marchand'></Column>
+                                                        <Column field='nom_Pm' filter header='Nom du Point Marchand' body={NomPMcontent}></Column>
                                                         <Column field='date' sortable header='Date de visite'></Column>
                                                     </DataTable>
                                                 )

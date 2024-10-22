@@ -84,6 +84,7 @@ export default function DashboardAdmin(){
   const [debut, setDebut] = useState(null);
   const [fin, setFin] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [routineClass, setRoutineClass] = useState('');
 
   const formatDate = (date) => {
     return date.toISOString().slice(0, 10); // Convert to "YYYY-MM-DD"
@@ -124,6 +125,16 @@ export default function DashboardAdmin(){
           data = await routineInfos.getRoutineInfosForDC();
         }
         setCommercials(data);
+        // if (data.routineEffectués > 0){
+        //   if (data.routineEffectués >= 7){
+        //     setRoutineClass('fw-bold text-success')
+        //   }else{
+        //     setRoutineClass('fw-bold text-warning')
+        //   }
+        // }else{
+        //   setRoutineClass('fw-bold')
+        // }
+        // console.log(routineClass)
       } catch(error){
         console.error('Error fetching data', error);
       }
@@ -189,7 +200,7 @@ export default function DashboardAdmin(){
                           </div>
                           <div className='text-info d-flex justify-content-between'>
                             <span>Interventions :</span>
-                            <span className='fw-bold'>{commercial.routineEffectués}</span>
+                            <span className="fw-bold">{commercial.routineEffectués}</span>
                           </div>
                         </div>
                         <div>

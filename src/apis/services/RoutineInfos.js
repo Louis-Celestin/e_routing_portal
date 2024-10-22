@@ -97,7 +97,8 @@ export class RoutineInfos {
 async getRoutineInfosForDcByCommercialByDateRange(id, startDateValue, endDateValue){
   try {
       const response = await axios.post(`${urlBase}/api/getRoutineInfosForDcByCommercialByDateRange`,
-          { idCommercial: id,
+          { 
+            idCommercial: id,
             dateDebut: startDateValue,
             dateFin:  endDateValue,
           }, // Données envoyées en JSON
